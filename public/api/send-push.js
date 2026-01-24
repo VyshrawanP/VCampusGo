@@ -22,7 +22,6 @@ function getTodayMenu(meal) {
   );
 
   if (!todayMenu) return null;
-
   return todayMenu[meal]?.join(", ") || "Menu not available";
 }
 
@@ -31,10 +30,10 @@ export default async function handler(req, res) {
   if (!meal) return res.status(400).end();
 
   const menuText = getTodayMenu(meal);
-  if (!menuText) return res.status(200).end();
+  if (!menuText) return res.json({ skipped: true });
 
   const payload = JSON.stringify({
-    title: `${meal.charAt(0).toUpperCase() + meal.slice(1)} in 1 hour`,
+    title: `${meal.toUpperCase()} in 1 hour`,
     body: menuText
   });
 
