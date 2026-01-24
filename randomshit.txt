@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Student Utility Portal</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+
+
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2563eb">
+</head>
+
+<body>
+
+  <!-- ================= HEADER / FACULTY FINDER ================= -->
+  <header class="header">
+    <h1>Faculty Finder</h1>
+    <p class="subtitle">
+      “An unofficial student-to-student helper — built only to make campus life easier.”
+    </p>
+
+    <div class="search-container">
+      <input
+        type="text"
+        id="facultySearch"
+        placeholder="Find faculty"
+        autocomplete="off"
+      />
+    </div>
+  </header>
+
+  <!-- ================= FACULTY RESULTS ================= -->
+  <main class="main-content">
+    <section class="faculty-section">
+      <div id="facultyResults" class="faculty-grid">
+        <!-- Faculty cards injected via JS -->
+      </div>
+    </section>
+
+    <!-- ================= MESS MENU ================= -->
+    <section class="mess-section">
+      <h2>Today’s Mess Menu</h2>
+      <p id="messMeta" class="mess-meta">
+        <!-- Hostel · Month Year -->
+      </p>
+
+      <div id="messCards" class="mess-grid">
+        <!-- Meal cards injected via JS -->
+      </div>
+
+      <button id="notifyBtn" class="notify-btn">
+        Enable today’s meal notifications
+      </button>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <p>Developed by Vyshrawan P</p>
+    <p class="footer-sub">Student project · Unofficial</p>
+  </footer>
+
+  <!-- ================= JS ================= -->
+  <script src="js/faculty.js"></script>
+  <script src="js/mess.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>

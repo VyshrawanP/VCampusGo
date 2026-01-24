@@ -1,0 +1,8 @@
+{
+  "name": "Student Utility Portal",
+  "short_name": "Campus Utility",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#2563eb"
+}
