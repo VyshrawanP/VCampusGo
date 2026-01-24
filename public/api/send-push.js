@@ -1,3 +1,6 @@
+export const config = {
+  runtime: "nodejs"
+};
 import webpush from "web-push";
 import fs from "fs";
 import path from "path";
