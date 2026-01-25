@@ -6,8 +6,7 @@ const messMetaEl = document.getElementById("messMeta");
 const messCardsEl = document.getElementById("messCards");
 const today = new Date();
 const now = new Date();
-now.setHours(6);
-now.setMinutes(31);
+
 
 const todayDate = today.getDate(); // 1–31 (this is what your JSON uses)
 
