@@ -1,11 +1,13 @@
 name: Mess Notifications
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: "0 1 * * *"   # Breakfast (6:30 AM IST)
-    - cron: "0 6 * * *"   # Lunch (11:30 AM IST)
-    - cron: "0 10 * * *"  # Snacks (3:30 PM IST)
-    - cron: "0 13 * * *"  # Dinner (6:30 PM IST)
+    - cron: "0 1 * * *"
+    - cron: "0 6 * * *"
+    - cron: "0 10 * * *"
+    - cron: "0 13 * * *"
+
 
 jobs:
   notify:
