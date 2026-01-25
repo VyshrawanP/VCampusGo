@@ -1,50 +1,343 @@
 {
-"25": {
-  "breakfast": ["Gobi Paratha (2 Pcs Standard Size)", "Ugganni", "Mango Pickle", "Ghee + Podi", "Masala Omlet", "Sprouts (One Cup)", "Brown Bread, Butter, Jam", "Milk, Tea, Coffee", "Chocos", "Pineapple Juice"],
-  "lunch": ["Onion & Lemon Salad", "Phulka", "Chicken Dum Biryani / Paneer Biryani", "White Rice", "Chicken Gravy / Veg Salna", "Dal Fry", "Raita", "Curd", "Ice Cream"],
-  "snacks": ["Pani Puri", "Tea, Coffee, Milk"],
-  "dinner": ["Carrot Cucumber Salad", "Phulka", "Veg Fried Rice", "White Rice", "Aloo Fry", "Sambar", "Curd", "Papaya", "Veg Clear Soup"]
-},
-
-"26": {
-  "breakfast": ["Uttapam (2 pcs)", "Coconut Chutney", "Sambar", "Brown Bread, Butter, Jam", "Milk, Tea, Coffee", "Scrambled Egg", "Grape Juice"],
-  "lunch": ["Cucumber Salad", "Phulka", "Curd Rice", "White Rice", "Paneer Makhani / Mixed Veg Fry", "Dal Fry", "Rasam", "Curd", "Puran Poli"],
-  "snacks": ["Sweet Corn", "Tea, Coffee, Milk"],
-  "dinner": ["Onion Salad", "Phulka", "Wheat Upma", "White Rice", "Dal Fry", "Mixed Veg Curry", "Curd", "Grapes", "Veg Hot & Sour Soup"]
-},
-
-"27": {
-  "breakfast": ["Idli (3 pcs) & Vada (1 pc)", "Sambar", "Coconut Chutney", "Brown Bread, Butter, Jam", "Milk, Tea, Coffee", "Boiled Egg", "Pomegranate Juice"],
-  "lunch": ["Carrot Cucumber Salad", "Chapatis", "Veg Pulao", "White Rice", "Dal Maharani", "Aloo Matar", "Rasam", "Curd", "Fruit Custard"],
-  "snacks": ["Onion Pakoda", "Tea, Coffee, Milk"],
-  "dinner": ["Cucumber Salad", "Chapatis", "Lemon Rice", "White Rice", "Dal Fry", "Curd", "Pineapple", "Tomato Soup"]
-},
-
-"28": {
-  "breakfast": ["Cheese Bread (2 slices)", "Tomato Chutney", "Sambar", "Brown Bread, Butter, Jam", "Milk, Tea, Coffee", "Omelette", "Apple Juice"],
-  "lunch": ["Onion Salad", "Phulka", "Tomato Rice", "White Rice", "Butter Chicken / Paneer Roast", "Dal Fry", "Rasam", "Curd", "Gulab Jamun"],
-  "snacks": ["Bread Pakoda", "Tea, Coffee, Milk"],
-  "dinner": ["Cucumber Salad", "Chapatis", "Veg Biryani", "White Rice", "Aloo Fry", "Sambar", "Curd", "Muskmelon", "Veg Soup"]
-},
-
-"29": {
-  "breakfast": ["Puri (4 pcs)", "Potato Bhaji", "Kobbari Chutney", "Dal Chutney", "Brown Bread, Butter, Jam", "Milk, Tea, Coffee", "Sprouts", "Watermelon Juice"],
-  "lunch": ["Mixed Greens Salad", "Phulka", "Soya Chunks Bean Biryani", "White Rice", "Dal Fry", "Potato Fry", "Sambar/Puli Kuzhambu", "Thovayal", "Curd", "Fruit Trifle"],
-  "snacks": ["Sweet Paniyaram", "Groundnut Chutney", "Ginger Tea, Coffee, Milk"],
-  "dinner": ["Carrot Cucumber Salad", "Roti", "Keerai Kootu", "White Rice", "Groundnut Chutney", "Thovayal", "Vathal Kuzhambu", "Curd", "Watermelon", "Tomato Soup"]
-},
-
-"30": {
-  "breakfast": ["Mysore Bonda (4 pcs)", "Groundnut Chutney", "Ginger Chutney", "Brown Bread, Butter, Jam", "Milk, Tea, Coffee", "Masala Omelette", "Banana Juice"],
-  "lunch": ["Kachumber Salad", "Phulka", "Tomato Rice", "White Rice", "Dal Maharani", "Aloo Matar", "Rasam", "Curd", "Sweet Boondi"],
-  "snacks": ["Pav Bhaji", "Masala Tea, Coffee, Milk"],
-  "dinner": ["Cucumber Salad", "Phulka", "Andhra Style Chicken Curry / Kadai Paneer", "White Rice", "Tomato Pappu", "Tomato Pickle", "Curd", "Banana", "Sweet Corn Soup"]
-},
-
-"31": {
-  "breakfast": ["Idli (3 pcs) & Vada (1 pc)", "Sambar", "Coconut Chutney", "Brown Bread, Butter, Jam", "Milk, Tea, Coffee", "Boiled Egg", "Muskmelon Juice"],
-  "lunch": ["Cabbage Salad", "Phulka", "Lemon Rice", "White Rice", "Andhra Style Chicken Curry / Paneer Makhani", "Mixed Veg Poriyal", "Rasam", "Curd", "Gulab Jamun"],
-  "snacks": ["Samosa (2 pcs)", "Green Chutney", "Coffee, Tea, Milk"],
-  "dinner": ["Carrot Salad", "Phulka", "Tomato Bath", "White Rice", "Aloo Fry", "Dal Makhani", "Curd", "Muskmelon", "Hot & Sour Soup"]
-}
+  "25": {
+    "breakfast": [
+      "Gobi Paratha (2 Pcs Standard Size)",
+      "Mango Pickle",
+      "Thick Curd",
+      "Ugganni",
+      "Groundnut Chutney",
+      "Ghee + Podi",
+      "Brown Bread + Butter + Jam",
+      "Milk, Tea, Coffee Powder",
+      "Masala Omlet",
+      "Sprouts (One Cup)",
+      "Chocos",
+      "Pineapple Fresh Juice"
+    ],
+    "lunch": [
+      "Onions & Lemon Salad",
+      "Roti",
+      "Chicken Dum Biryani (NV) / Paneer Dum Vegetable Biryani (VEG)",
+      "White Rice",
+      "Chicken GRAVY (NV) / Hyderabadi Mirchi Ka Salan (VEG)",
+      "Onion Raitha",
+      "Punjabi Dal Fry",
+      "Rasam",
+      "Fryums (golden fingers)",
+      "Lemon water with Sabja Seeds",
+      "Gongura katta",
+      "Cup Ice Cream"
+    ],
+    "snacks": [
+      "Pani Poori (7pcs)",
+      "Onions",
+      "Ginger Tea, Coffee Power, Milk"
+    ],
+    "dinner": [
+      "Carrot and Cucumber Salad",
+      "Roti",
+      "White Rice",
+      "Set Dosa",
+      "Groundnut Chutney",
+      "Dal Makhani",
+      "Veg kurma",
+      "Aloo Deep Fry",
+      "Thick Curd",
+      "Sambar",
+      "Papaya Fruit",
+      "Mango pickle",
+      "Milk, Coffee Powder",
+      "Veg Clear Soup"
+    ]
+  },
+  "26": {
+    "breakfast": [
+      "Chole Bhature (2 Pcs Medium Size)",
+      "Pongal",
+      "Coconut chutney",
+      "Milk Bread + Butter + Jam",
+      "Milk, Tea, Coffee Powder",
+      "Scrambled Egg",
+      "Sprouts (One Cup)",
+      "Muesli",
+      "Grape Fresh Juice"
+    ],
+    "lunch": [
+      "Cucumber Salad",
+      "Phulka",
+      "Jeera rice",
+      "White Rice",
+      "Pesara punugulu curry 'Pakka andhra style'",
+      "Bhindi do pyaza",
+      "Dal Fry",
+      "Sambar",
+      "Rasam",
+      "Rava vadiyalu",
+      "Lassi",
+      "Tomato Chutney, Ghee + Podi",
+      "Sweet Bhoondi"
+    ],
+    "snacks": [
+      "Tossed Sweet Corn",
+      "Masala Tea, Coffee Power, Milk"
+    ],
+    "dinner": [
+      "Onions Salad",
+      "Phulka",
+      "Wheat upma",
+      "Dal Chutney",
+      "Veg pulav",
+      "White Rice",
+      "Shahi Paneer / Dhaba Style Chicken Curry",
+      "Rasam",
+      "Palak Dal",
+      "Thick Curd",
+      "Gongura Pickle",
+      "Banana Fruit",
+      "Milk, Coffee Powder",
+      "Hot and Sour Soup"
+    ]
+  },
+  "27": {
+    "breakfast": [
+      "Idly",
+      "Methu Vada (2 pcs Standard Size, If Not 3 pcs)",
+      "Coconut chutney",
+      "Sambar",
+      "Brown Bread + Butter + Jam",
+      "Milk, Tea, Coffee Powder",
+      "Boiled Egg",
+      "Sprouts (One Cup)",
+      "Cornflakes",
+      "Pomegranate Fresh Juice"
+    ],
+    "lunch": [
+      "Carrot and Cucumber Salad",
+      "Chapathi",
+      "Bisibele bath",
+      "White Rice",
+      "Aloo masala Poriyal",
+      "Thotakura Pappu",
+      "Rasam",
+      "Rajma Masala",
+      "Curd Vada",
+      "Lemon water with Sabja Seeds",
+      "Potato Chips",
+      "Dosakaya Chutney, Ghee + Podi",
+      "Semiya Payasam"
+    ],
+    "snacks": [
+      "Punugulu (10pcs standard size)",
+      "Groundnut chutney",
+      "karam podi",
+      "Ginger Tea, Coffee Power, Milk"
+    ],
+    "dinner": [
+      "Carrot Salad",
+      "Chapathi",
+      "White Rice",
+      "Veg biriyani",
+      "Aloo mutter Curry",
+      "Tomato Rasam",
+      "Thick Curd",
+      "Sambar",
+      "Tomato Pickle",
+      "Pineapple Fruit",
+      "Milk",
+      "Coffee Powder",
+      "Tomato Soup with Roasted Bread"
+    ]
+  },
+  "28": {
+    "breakfast": [
+      "Masala Dosa (2 pcs thin)",
+      "Poha",
+      "Dal chutney",
+      "Sambar",
+      "Milk Bread + Butter + Jam",
+      "Milk, Tea, Coffee Powder",
+      "Omlet",
+      "Sprouts (One Cup)",
+      "Chocos",
+      "Apple Fresh Juice"
+    ],
+    "lunch": [
+      "Onions Salad",
+      "Roti",
+      "Bhagara rice",
+      "White Rice",
+      "Andhra Style Chicken curry / Panneer Butter Masala",
+      "Mango Dal",
+      "Tomato Rasam",
+      "Masala Beans Poriyal",
+      "Butter milk",
+      "Fryums (golden fingers)",
+      "Vankaya (brinjal) Chutney, Ghee + Podi",
+      "Bhadushah"
+    ],
+    "snacks": [
+      "Bread Pakoda 1 pc",
+      "Sauce",
+      "Masala Tea, Coffee Power, Milk"
+    ],
+    "dinner": [
+      "Cucumber Salad",
+      "Chapathi",
+      "White Rice",
+      "Ragi Idly (3 pcs)",
+      "Groundnut Chutney",
+      "Dondakayi Deep Fry with Palli",
+      "Lauki Channa Masala",
+      "Rasam",
+      "Sambar",
+      "Thick Curd",
+      "Mango Pickle",
+      "Muskmelon Fruit",
+      "Milk, Coffee Powder",
+      "Sweetcorn Soup"
+    ]
+  },
+  "29": {
+    "breakfast": [
+      "Poori (3 pcs Big)",
+      "Potato korma",
+      "Semiya Upma",
+      "Dal Chutney",
+      "Brown Bread + Butter + Jam",
+      "Milk, Tea, Coffee Powder",
+      "Boiled Egg",
+      "Sprouts (One Cup)",
+      "Cornflakes",
+      "Watermelon Fresh Juice"
+    ],
+    "lunch": [
+      "Boiled Channa with tomato & onions",
+      "Phulka",
+      "Soya Chunks Dum Biryani",
+      "White Rice",
+      "Veg do Pyaza",
+      "Dal Thadka",
+      "Sambar",
+      "Boondi raita",
+      "Fryums (Triangle)",
+      "Lemon water with Sabja Seeds",
+      "Beerakaya Chutney",
+      "Ghee + Podi",
+      "Shahi ka Tukda"
+    ],
+    "snacks": [
+      "Onion Pakoda",
+      "Groundnut Chutney",
+      "Ginger Tea, Coffee Power, Milk"
+    ],
+    "dinner": [
+      "Carrot and Cucumber Salad",
+      "Roti",
+      "Sooji Upma",
+      "Coconut chutney",
+      "White Rice",
+      "Groundnut Chutney",
+      "Tomato Dal",
+      "Rasam",
+      "Ladies finger with palli Deep fry",
+      "Thick Curd",
+      "Gongura Pickle",
+      "Watermelon Fruit",
+      "Milk, Coffee Powder",
+      "Tomato Soup with Roasted Bread"
+    ]
+  },
+  "30": {
+    "breakfast": [
+      "Mysore Bonda (2 pcs Medium Size)",
+      "Idly",
+      "Groundnut chutney",
+      "Ginger chutney",
+      "Milk Bread + Butter + Jam",
+      "Milk, Tea, Coffee Powder",
+      "Masala Omlette",
+      "Sprouts (One Cup)",
+      "Chocos",
+      "Banana Fresh Juice"
+    ],
+    "lunch": [
+      "Carrot Salad",
+      "Chapathi",
+      "Tomato Rice",
+      "White Rice",
+      "Mixed Veg Poriyal",
+      "Gutti Vankaya Curry (Stuffed eggplant curry)",
+      "Dal Maharani",
+      "Sambar",
+      "Lassi",
+      "Fryums (onion rings)",
+      "Coriander Chutney, Ghee + Podi",
+      "Ravva Kesari"
+    ],
+    "snacks": [
+      "Aloo Chaat",
+      "Masala Tea, Coffee Power, Milk"
+    ],
+    "dinner": [
+      "Onions Salad",
+      "Missi roti",
+      "White Rice",
+      "Andhra Style Chicken fry (semi fry) / Kadai paneer curry",
+      "Pesara Pappu",
+      "Tomato Rasam",
+      "Thick Curd",
+      "Tomato Pickle",
+      "Orange Fruit",
+      "Milk",
+      "Coffee Powder",
+      "Sweetcorn Soup"
+    ]
+  },
+  "31": {
+    "breakfast": [
+      "Onion & Corrot Uttappam (2pcs standard size)",
+      "Coconut chutney",
+      "Pav Bhaji",
+      "Sambar",
+      "Brown Bread + Butter + Jam",
+      "Milk, Tea, Coffee Powder",
+      "Egg Burji",
+      "Sprouts (One Cup)",
+      "Muesli",
+      "Muskmelon Fresh Juice"
+    ],
+    "lunch": [
+      "Cucumber Salad",
+      "Chapathi",
+      "Pulihora",
+      "White Rice",
+      "Aloo Bhindi Masala",
+      "Andhra Style Muddha Pappu + Avakaya",
+      "Rasam",
+      "Ghee + Podi",
+      "Butter Milk",
+      "Papad",
+      "Jilebi"
+    ],
+    "snacks": [
+      "Sambar Vada (2 Pcs)",
+      "Ginger Tea",
+      "Coffee Power, Milk"
+    ],
+    "dinner": [
+      "Carrot Salad",
+      "Chapathi",
+      "Tomato bath",
+      "Dal chutney",
+      "White Rice",
+      "Aloo Deep Fry",
+      "Thick Curd",
+      "Dal Maharani",
+      "Sambar",
+      "Fruit Custard",
+      "Red chilli Pickle",
+      "Milk, coffe Power",
+      "Lemon Coriander Soup"
+    ]
+  }
 }
