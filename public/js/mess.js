@@ -5,6 +5,10 @@
 const messMetaEl = document.getElementById("messMeta");
 const messCardsEl = document.getElementById("messCards");
 const today = new Date();
+const now = new Date();
+now.setHours(6);
+now.setMinutes(31);
+
 const todayDate = today.getDate(); // 1–31 (this is what your JSON uses)
 
 
@@ -20,6 +24,8 @@ fetch("./data/mess_menue.json")
     console.error(err);
     messCardsEl.innerHTML = "<p>Failed to load menu</p>";
   });
+
+
 
 function renderTodayMenu(data) {
   messMetaEl.textContent = "VIT-AP Hostels · January 2026";

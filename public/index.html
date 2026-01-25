@@ -5,28 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Student Utility Portal</title>
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
+
 
   <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
 
 
-
-
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#2563eb">
+
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+/>
+
+
+
 </head>
 
 <body>
 
   <!-- ================= HEADER / FACULTY FINDER ================= -->
   <header class="header">
-    <h1>Faculty Finder</h1>
+
+    <div class="title-things">
+
+      <h1>VCampusHelper</h1>
+      </div>
+
+
     <p class="subtitle">
       “An unofficial student-to-student helper — built only to make campus life easier.”
     </p>
@@ -48,7 +67,7 @@
         <!-- Faculty cards injected via JS -->
       </div>
     </section>
-
+  <h2>More Utilities</h2>
     <!-- ================= MESS MENU ================= -->
     <section class="mess-section">
       <h2>Today’s Mess Menu</h2>
@@ -61,18 +80,47 @@
       </div>
 
       <button id="notifyBtn" class="notify-btn">
-        Enable today’s meal notifications
+        Enable  meal notifications
       </button>
     </section>
+    
+
+  <div class="visual-grid">
+    <a href="https://ripdspace.netlify.app/" class="visual-card">
+      <i class="fas fa-book-open"></i>
+      <h3>Visit PYQs</h3>
+      <p>Previous year question papers</p>
+    </a>
+
+
+    <a href="https://cgpacalculation-2.onrender.com/" class="visual-card">
+      <i class="fas fa-calculator"></i>
+      <h3>CGPA Calculator</h3>
+      <p>Calculate your CGPA easily</p>
+     
+    </a>
   </main>
 
   <!-- ================= FOOTER ================= -->
   <footer class="footer">
-    <p>Developed by Vyshrawan P</p>
+      <div class="footer-content">
+    <p class="footer-name">Developed by <strong>Vyshrawan P</strong></p>
     <p class="footer-sub">Student project · Unofficial</p>
+
+  <div class="footer-links">
+  <a href="https://www.linkedin.com/in/vyshrawan-p-795b5b256/" target="_blank" rel="noopener noreferrer">
+    <i class="fab fa-linkedin"></i> LinkedIn
+  </a>
+  <a href="https://github.com/VyshrawanP" target="_blank" rel="noopener noreferrer">
+    <i class="fab fa-github"></i> GitHub
+  </a>
+</div>
+
+
+  </div>
   </footer>
 
-  <!-- ================= JS ================= -->
+  <!-- ================= JS (UNCHANGED) ================= -->
   <script src="js/faculty.js"></script>
   <script src="js/mess.js"></script>
   <script src="js/notification.js"></script>

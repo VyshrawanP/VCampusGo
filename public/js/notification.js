@@ -1,5 +1,10 @@
+// ================================
+// NOTIFICATIONS (SIMPLE & SAFE)
+// ================================
+
 const notifyBtn = document.getElementById("notifyBtn");
 
+// 1️⃣ Ask permission when user clicks
 notifyBtn.addEventListener("click", async () => {
   if (!("serviceWorker" in navigator)) {
     alert("Service workers not supported");
@@ -12,28 +17,41 @@ notifyBtn.addEventListener("click", async () => {
     return;
   }
 
-  const reg = await navigator.serviceWorker.ready;
-
-  const subscription = await reg.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array("YOUR_PUBLIC_VAPID_KEY")
-  });
-
-  await fetch("/api/subscribe", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(subscription)
-  });
-
-  alert("Meal notifications enabled");
+  alert("Meal notifications enabled ✅");
 });
 
-function urlBase64ToUint8Array(base64String) {
-  const padding = "=".repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, "+")
-    .replace(/_/g, "/");
-
-  const raw = atob(base64);
-  return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+// 2️⃣ Morning notification logic
+function sendMorningNotification() {
+  navigator.serviceWorker.ready.then(reg => {
+    reg.showNotification("🌅 Good Morning", {
+      body: "Breakfast will be available soon",
+    });
+  });
 }
+
+// 3️⃣ Time check (6:30 AM)
+function checkMorningNotification() {
+  const now = new Date();
+  const isAfterMorning =
+    now.getHours() > 6 ||
+    (now.getHours() === 6 && now.getMinutes() >= 30);
+
+  const today = now.toDateString();
+  const alreadySent = localStorage.getItem("morningSent") === today;
+
+  if (isAfterMorning && !alreadySent) {
+    sendMorningNotification();
+    localStorage.setItem("morningSent", today);
+  }
+}
+
+// 4️⃣ Run check on page load
+checkMorningNotification();
+
+// ================================
+// DEBUG (THIS IS WHAT YOU ASKED)
+// ================================
+
+window.testMorning = () => {
+  sendMorningNotification();
+};
