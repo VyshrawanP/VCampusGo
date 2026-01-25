@@ -1,0 +1,26 @@
+name: Mess Notifications
+
+on:
+  schedule:
+    - cron: "0 1 * * *"   # Breakfast (6:30 AM IST)
+    - cron: "0 6 * * *"   # Lunch (11:30 AM IST)
+    - cron: "0 10 * * *"  # Snacks (3:30 PM IST)
+    - cron: "0 13 * * *"  # Dinner (6:30 PM IST)
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm install node-fetch
+      - run: |
+          if [ "${{ github.event.schedule }}" == "0 1 * * *" ]; then node sendMessNotification.js breakfast; fi
+          if [ "${{ github.event.schedule }}" == "0 6 * * *" ]; then node sendMessNotification.js lunch; fi
+          if [ "${{ github.event.schedule }}" == "0 10 * * *" ]; then node sendMessNotification.js snacks; fi
+          if [ "${{ github.event.schedule }}" == "0 13 * * *" ]; then node sendMessNotification.js dinner; fi
+        env:
+          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
+          ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}

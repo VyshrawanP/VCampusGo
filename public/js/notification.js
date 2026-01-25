@@ -5,53 +5,49 @@
 const notifyBtn = document.getElementById("notifyBtn");
 
 // 1️⃣ Ask permission when user clicks
-notifyBtn.addEventListener("click", async () => {
-  if (!("serviceWorker" in navigator)) {
-    alert("Service workers not supported");
-    return;
-  }
-
-  const permission = await Notification.requestPermission();
-  if (permission !== "granted") {
-    alert("Notifications denied");
-    return;
-  }
-
-  alert("Meal notifications enabled ✅");
+document.getElementById("notifyBtn").addEventListener("click", () => {
+  OneSignal.push(() => {
+    OneSignal.showSlidedownPrompt();
+  });
 });
 
-// 2️⃣ Morning notification logic
-function sendMorningNotification() {
-  navigator.serviceWorker.ready.then(reg => {
-    reg.showNotification("🌅 Good Morning", {
-      body: "Breakfast will be available soon",
-    });
-  });
+import fs from "fs";
+import fetch from "node-fetch";
+
+const meal = process.argv[2];
+
+const data = JSON.parse(fs.readFileSync("mess_menu.json", "utf-8"));
+
+const today = new Date();
+const todayDate = today.getDate();
+const todayDay = today.toLocaleDateString("en-US", { weekday: "long" });
+
+const todayMenu = data.menu.find(
+  d => d.date === todayDate && d.day === todayDay
+);
+
+if (!todayMenu || !todayMenu[meal]) {
+  console.log("No menu for today");
+  process.exit(0);
 }
 
-// 3️⃣ Time check (6:30 AM)
-function checkMorningNotification() {
-  const now = new Date();
-  const isAfterMorning =
-    now.getHours() > 6 ||
-    (now.getHours() === 6 && now.getMinutes() >= 30);
+const message = todayMenu[meal].join(", ");
 
-  const today = now.toDateString();
-  const alreadySent = localStorage.getItem("morningSent") === today;
+await fetch("https://onesignal.com/api/v1/notifications", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Basic ${process.env.ONESIGNAL_API_KEY}`
+  },
+  body: JSON.stringify({
+    app_id: process.env.ONESIGNAL_APP_ID,
+    headings: { en: `${meal.toUpperCase()} in 1 hour` },
+    contents: { en: message },
+    included_segments: ["Subscribed Users"]
+  })
+});
 
-  if (isAfterMorning && !alreadySent) {
-    sendMorningNotification();
-    localStorage.setItem("morningSent", today);
-  }
-}
+console.log("Notification sent");
 
-// 4️⃣ Run check on page load
-checkMorningNotification();
 
-// ================================
-// DEBUG (THIS IS WHAT YOU ASKED)
-// ================================
 
-window.testMorning = () => {
-  sendMorningNotification();
-};
