@@ -12,7 +12,11 @@ if (!admin.apps.length) {
 
 export default async function handler(req, res) {
   const { meal } = req.query; // breakfast | lunch | snacks | dinner
-  const today = new Date().getDate().toString();
+  const istDate = new Date(
+  new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+);
+const today = istDate.getDate().toString();
+
 
   const menuPath = path.join(process.cwd(), "public/data/mess_menue.json");
   const menu = JSON.parse(fs.readFileSync(menuPath, "utf8"));
