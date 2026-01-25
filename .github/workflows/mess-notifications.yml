@@ -2,6 +2,11 @@ name: Mess Notifications
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * *"   # Breakfast – 6:30 AM IST
+    - cron: "0 6 * * *"   # Lunch – 11:30 AM IST
+    - cron: "0 10 * * *"  # Snacks – 3:30 PM IST
+    - cron: "0 13 * * *"  # Dinner – 6:30 PM IST
 
 jobs:
   notify:
@@ -15,9 +20,32 @@ jobs:
 
       - run: npm install node-fetch
 
-      - name: Send lunch notification (test)
+      - name: Send breakfast
+        if: github.event.schedule == '0 1 * * *'
+        run: node sendMessNotification.js breakfast
+        env:
+          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
+          ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
+
+      - name: Send lunch
+        if: github.event.schedule == '0 6 * * *'
         run: node sendMessNotification.js lunch
         env:
           ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
           ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
+
+      - name: Send snacks
+        if: github.event.schedule == '0 10 * * *'
+        run: node sendMessNotification.js snacks
+        env:
+          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
+          ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
+
+      - name: Send dinner
+        if: github.event.schedule == '0 13 * * *'
+        run: node sendMessNotification.js dinner
+        env:
+          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
+          ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
+
 
