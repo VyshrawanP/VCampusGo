@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   const { meal } = req.query; // breakfast | lunch | snacks | dinner
   const today = new Date().getDate().toString();
 
-  const menuPath = path.join(process.cwd(), "data/mess-menu.json");
+  const menuPath = path.join(process.cwd(), "public/data/mess-menue.json");
   const menu = JSON.parse(fs.readFileSync(menuPath, "utf8"));
 
   const items = menu[today]?.[meal];
