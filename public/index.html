@@ -86,8 +86,16 @@
       </div>
 
     
-      <button id="notifyBtn" class="notify-btn">Enable meal notifications</button>
-      <script type="module" src="/js/fcm.js"></script>
+     <button id="notifyBtn" class="notify-btn">Enable meal notifications</button>
+
+<!-- 🔑 DEFINE VAPID KEY FIRST -->
+<script>
+  window.VAPID_KEY = "BNxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+</script>
+
+<!-- 🚀 THEN load Firebase code -->
+<script type="module" src="/js/fcm.js"></script>
+
 
 
     </section>
