@@ -1,8 +1,24 @@
 {
   "crons": [
-    { "path": "/api/send-push?meal=breakfast", "schedule": "30 6 * * *" },
-    { "path": "/api/send-push?meal=lunch", "schedule": "30 11 * * *" },
-    { "path": "/api/send-push?meal=snacks", "schedule": "30 15 * * *" },
-    { "path": "/api/send-push?meal=dinner", "schedule": "30 18 * * *" }
+    {
+      "path": "/api/send-push?meal=breakfast",
+      "schedule": "30 6 * * *",
+      "timezone": "Asia/Kolkata"
+    },
+    {
+      "path": "/api/send-push?meal=lunch",
+      "schedule": "30 11 * * *",
+      "timezone": "Asia/Kolkata"
+    },
+    {
+      "path": "/api/send-push?meal=snacks",
+      "schedule": "30 15 * * *",
+      "timezone": "Asia/Kolkata"
+    },
+    {
+      "path": "/api/send-push?meal=dinner",
+      "schedule": "30 18 * * *",
+      "timezone": "Asia/Kolkata"
+    }
   ]
 }
