@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import menu from "../data/mess_menue.json";
+import menu from "../public/data/mess_menue.json";
 
 if (!admin.apps.length) {
   admin.initializeApp({
