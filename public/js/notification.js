@@ -1,16 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const notifyBtn = document.getElementById("notifyBtn");
+  const btn = document.getElementById("notifyBtn");
 
-  if (!notifyBtn) return;
+  console.log("notification.js loaded");
 
-  notifyBtn.addEventListener("click", () => {
-    if (!window.OneSignal) {
-      alert("Notification service not ready. Try again.");
-      return;
-    }
+  btn.addEventListener("click", async () => {
+    console.log("button clicked");
 
-    OneSignal.push(() => {
-      OneSignal.showSlidedownPrompt();
-    });
+    const permission = await OneSignal.getNotificationPermission();
+    console.log("current permission:", permission);
+
+    OneSignal.showNativePrompt();
   });
 });

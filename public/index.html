@@ -31,15 +31,8 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
 />
 
-<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-<script>
-  window.OneSignal = window.OneSignal || [];
-  OneSignal.push(function() {
-    OneSignal.init({
-      appId: "f5bb3018-79ed-496c-9b5d-ebc9d8a39a56",
-    });
-  });
-</script>
+
+
 
 
 
@@ -92,9 +85,11 @@
         <!-- Meal cards injected via JS -->
       </div>
 
-      <button id="notifyBtn" class="notify-btn">
-        Enable  meal notifications
-      </button>
+    
+      <button id="notifyBtn" class="notify-btn">Enable meal notifications</button>
+      <script type="module" src="/js/fcm.js"></script>
+
+
     </section>
     
 
