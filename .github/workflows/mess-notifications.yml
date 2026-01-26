@@ -1,51 +1,49 @@
 name: Mess Notifications
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: "0 1 * * *"   # Breakfast – 6:30 AM IST
-    - cron: "0 6 * * *"   # Lunch – 11:30 AM IST
-    - cron: "0 10 * * *"  # Snacks – 3:30 PM IST
-    - cron: "0 13 * * *"  # Dinner – 6:30 PM IST
+    # Times are in UTC
+    - cron: "30 1 * * *"   # Breakfast → 7:00 AM IST
+    - cron: "30 6 * * *"   # Lunch → 12:00 PM IST
+    - cron: "30 10 * * *"  # Snacks → 4:00 PM IST
+    - cron: "30 13 * * *"  # Dinner → 7:00 PM IST
 
 jobs:
   notify:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - run: npm install node-fetch
+      - name: Install deps
+        run: npm install firebase-admin
 
-      - name: Send breakfast
-        if: github.event.schedule == '0 1 * * *'
+      - name: Send Breakfast
+        if: github.event.schedule == '30 1 * * *'
         run: node sendMessNotification.js breakfast
         env:
-          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
-          ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
-      - name: Send lunch
-        if: github.event.schedule == '0 6 * * *'
+      - name: Send Lunch
+        if: github.event.schedule == '30 6 * * *'
         run: node sendMessNotification.js lunch
         env:
-          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
-          ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
-      - name: Send snacks
-        if: github.event.schedule == '0 10 * * *'
+      - name: Send Snacks
+        if: github.event.schedule == '30 10 * * *'
         run: node sendMessNotification.js snacks
         env:
-          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
-          ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
-      - name: Send dinner
-        if: github.event.schedule == '0 13 * * *'
+      - name: Send Dinner
+        if: github.event.schedule == '30 13 * * *'
         run: node sendMessNotification.js dinner
         env:
-          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
-          ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
-
-
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
