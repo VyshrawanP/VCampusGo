@@ -1,35 +1,22 @@
-name: Mess Notifications
+name: Mess Notifications (Auto)
 
 on:
-  # ✅ MANUAL TRIGGER
   workflow_dispatch:
-    inputs:
-      meal:
-        description: "Meal to send (manual run only)"
-        required: true
-        type: choice
-        options:
-          - breakfast
-          - lunch
-          - snacks
-          - dinner
-
-  # ✅ AUTOMATIC TRIGGER (UTC TIMES)
   schedule:
-    - cron: "30 1 * * *"   # Breakfast (7:00 AM IST)
-    - cron: "30 6 * * *"   # Lunch (12:00 PM IST)
-    - cron: "30 10 * * *"  # Snacks (4:00 PM IST)
-    - cron: "30 13 * * *"  # Dinner (7:00 PM IST)
+    - cron: "30 23 * * *"  # Breakfast – 5:00 AM IST
+    - cron: "30 5 * * *"   # Lunch – 11:00 AM IST
+    - cron: "30 9 * * *"   # Snacks – 3:00 PM IST
+    - cron: "45 12 * * *"  # Dinner – 6:15 PM IST
 
 jobs:
   notify:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
@@ -37,22 +24,17 @@ jobs:
       - name: Install dependencies
         run: npm install firebase-admin
 
-      # 🧠 DETERMINE MEAL (AUTO vs MANUAL)
-      - name: Decide meal
+      - name: Decide meal based on time
         id: meal
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "meal=${{ github.event.inputs.meal }}" >> $GITHUB_OUTPUT
-          else
-            case "${{ github.event.schedule }}" in
-              "30 1 * * *") echo "meal=breakfast" >> $GITHUB_OUTPUT ;;
-              "30 6 * * *") echo "meal=lunch" >> $GITHUB_OUTPUT ;;
-              "30 10 * * *") echo "meal=snacks" >> $GITHUB_OUTPUT ;;
-              "30 13 * * *") echo "meal=dinner" >> $GITHUB_OUTPUT ;;
-            esac
-          fi
+          case "${{ github.event.schedule }}" in
+            "30 23 * * *") echo "meal=breakfast" >> $GITHUB_OUTPUT ;;
+            "30 5 * * *")  echo "meal=lunch" >> $GITHUB_OUTPUT ;;
+            "30 9 * * *")  echo "meal=snacks" >> $GITHUB_OUTPUT ;;
+            "45 12 * * *") echo "meal=dinner" >> $GITHUB_OUTPUT ;;
+            *) exit 1 ;;
+          esac
 
-      # 🚀 SEND NOTIFICATION
       - name: Send mess notification
         run: node sendMessNotification.js ${{ steps.meal.outputs.meal }}
         env:

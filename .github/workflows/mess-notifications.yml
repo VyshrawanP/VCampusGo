@@ -1,25 +1,12 @@
 name: Mess Notifications
 
 on:
-  # ✅ MANUAL TRIGGER
-  workflow_dispatch:
-    inputs:
-      meal:
-        description: "Meal to send (manual run only)"
-        required: true
-        type: choice
-        options:
-          - breakfast
-          - lunch
-          - snacks
-          - dinner
-
-  # ✅ AUTOMATIC TRIGGER (UTC TIMES)
+  workflow_dispatch:   # 👈 ADD THIS LINE
   schedule:
-    - cron: "30 1 * * *"   # Breakfast (7:00 AM IST)
-    - cron: "30 6 * * *"   # Lunch (12:00 PM IST)
-    - cron: "30 10 * * *"  # Snacks (4:00 PM IST)
-    - cron: "30 13 * * *"  # Dinner (7:00 PM IST)
+    - cron: "30 1 * * *"   # Breakfast
+    - cron: "30 6 * * *"   # Lunch
+    - cron: "30 10 * * *"  # Snacks
+    - cron: "30 13 * * *"  # Dinner
 
 jobs:
   notify:
@@ -34,26 +21,29 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm install firebase-admin
 
-      # 🧠 DETERMINE MEAL (AUTO vs MANUAL)
-      - name: Decide meal
-        id: meal
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "meal=${{ github.event.inputs.meal }}" >> $GITHUB_OUTPUT
-          else
-            case "${{ github.event.schedule }}" in
-              "30 1 * * *") echo "meal=breakfast" >> $GITHUB_OUTPUT ;;
-              "30 6 * * *") echo "meal=lunch" >> $GITHUB_OUTPUT ;;
-              "30 10 * * *") echo "meal=snacks" >> $GITHUB_OUTPUT ;;
-              "30 13 * * *") echo "meal=dinner" >> $GITHUB_OUTPUT ;;
-            esac
-          fi
+      - name: Send Breakfast
+        if: github.event.schedule == '30 1 * * *'
+        run: node sendMessNotification.js breakfast
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
-      # 🚀 SEND NOTIFICATION
-      - name: Send mess notification
-        run: node sendMessNotification.js ${{ steps.meal.outputs.meal }}
+      - name: Send Lunch
+        if: github.event.schedule == '30 6 * * *'
+        run: node sendMessNotification.js lunch
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Send Snacks
+        if: github.event.schedule == '30 10 * * *'
+        run: node sendMessNotification.js snacks
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Send Dinner
+        if: github.event.schedule == '30 13 * * *'
+        run: node sendMessNotification.js dinner
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
