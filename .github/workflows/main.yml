@@ -1,12 +1,12 @@
 name: Mess Notifications
 
 on:
+  workflow_dispatch:   # 👈 ADD THIS LINE
   schedule:
-    # Times are in UTC
-    - cron: "30 1 * * *"   # Breakfast → 7:00 AM IST
-    - cron: "30 6 * * *"   # Lunch → 12:00 PM IST
-    - cron: "30 10 * * *"  # Snacks → 4:00 PM IST
-    - cron: "30 13 * * *"  # Dinner → 7:00 PM IST
+    - cron: "30 1 * * *"   # Breakfast
+    - cron: "30 6 * * *"   # Lunch
+    - cron: "30 10 * * *"  # Snacks
+    - cron: "30 13 * * *"  # Dinner
 
 jobs:
   notify:
