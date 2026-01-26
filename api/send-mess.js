@@ -49,6 +49,8 @@ const today = istDate.getDate().toString();
       }
     }
   });
+  console.log("CRON HIT", new Date().toISOString(), meal);
+
 
   res.json({ sent: meal });
 }
