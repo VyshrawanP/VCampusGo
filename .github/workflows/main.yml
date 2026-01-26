@@ -1,0 +1,49 @@
+name: Mess Notifications
+
+on:
+  schedule:
+    # Times are in UTC
+    - cron: "30 1 * * *"   # Breakfast → 7:00 AM IST
+    - cron: "30 6 * * *"   # Lunch → 12:00 PM IST
+    - cron: "30 10 * * *"  # Snacks → 4:00 PM IST
+    - cron: "30 13 * * *"  # Dinner → 7:00 PM IST
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install deps
+        run: npm install firebase-admin
+
+      - name: Send Breakfast
+        if: github.event.schedule == '30 1 * * *'
+        run: node sendMessNotification.js breakfast
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Send Lunch
+        if: github.event.schedule == '30 6 * * *'
+        run: node sendMessNotification.js lunch
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Send Snacks
+        if: github.event.schedule == '30 10 * * *'
+        run: node sendMessNotification.js snacks
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Send Dinner
+        if: github.event.schedule == '30 13 * * *'
+        run: node sendMessNotification.js dinner
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
