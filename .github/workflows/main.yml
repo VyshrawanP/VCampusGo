@@ -24,16 +24,24 @@ jobs:
       - name: Install dependencies
         run: npm install firebase-admin
 
-      - name: Decide meal based on time
+      - name: Decide meal based on UTC time (SAFE)
         id: meal
         run: |
-          case "${{ github.event.schedule }}" in
-            "30 23 * * *") echo "meal=breakfast" >> $GITHUB_OUTPUT ;;
-            "30 5 * * *")  echo "meal=lunch" >> $GITHUB_OUTPUT ;;
-            "30 9 * * *")  echo "meal=snacks" >> $GITHUB_OUTPUT ;;
-            "45 12 * * *") echo "meal=dinner" >> $GITHUB_OUTPUT ;;
-            *) exit 1 ;;
-          esac
+          HOUR=$(date -u +"%H")
+          MIN=$(date -u +"%M")
+
+          if [ "$HOUR" = "23" ] && [ "$MIN" -ge 25 ] && [ "$MIN" -le 35 ]; then
+            echo "meal=breakfast" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "05" ] && [ "$MIN" -ge 25 ] && [ "$MIN" -le 35 ]; then
+            echo "meal=lunch" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "09" ] && [ "$MIN" -ge 25 ] && [ "$MIN" -le 35 ]; then
+            echo "meal=snacks" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "12" ] && [ "$MIN" -ge 40 ] && [ "$MIN" -le 50 ]; then
+            echo "meal=dinner" >> $GITHUB_OUTPUT
+          else
+            echo "Not a mess notification time. Exiting."
+            exit 0
+          fi
 
       - name: Send mess notification
         run: node sendMessNotification.js ${{ steps.meal.outputs.meal }}
