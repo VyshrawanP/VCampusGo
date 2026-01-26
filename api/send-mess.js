@@ -37,18 +37,15 @@ const today = istDate.getDate().toString();
 
   const body = "• " + items.join("\n• ");
 
-  await admin.messaging().send({
-    topic: "mess-alerts",
-    notification: {
-      title: titles[meal],
-      body
-    },
-    webpush: {
-      fcmOptions: {
-        link: "https://vcampusgo.vercel.app"
-      }
-    }
-  });
+await admin.messaging().send({
+  topic: "mess-alerts",
+  data: {
+    title: titles[meal],
+    body,
+    link: "https://vcampusgo.vercel.app"
+  }
+});
+
   console.log("CRON HIT", new Date().toISOString(), meal);
 
 
