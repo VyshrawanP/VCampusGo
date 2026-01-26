@@ -30,7 +30,7 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
 
     console.log("FCM TOKEN:", token);
 
-    // Send token to server ONCE
+    // Send token to server ONCE1
     const res = await fetch("/api/subscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
