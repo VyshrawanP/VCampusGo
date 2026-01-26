@@ -18,7 +18,7 @@
     },
     {
       "path": "/api/cron-test",
-      "schedule": "*/60 * * * *"
+      "schedule": "0 * * * *"
 
     }
   ]
