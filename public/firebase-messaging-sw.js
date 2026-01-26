@@ -10,18 +10,3 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
-  self.registration.showNotification(payload.data.title, {
-    body: payload.data.body,
-    data: {
-      url: payload.data.link
-    }
-  });
-});
-
-self.addEventListener("notificationclick", (event) => {
-  event.notification.close();
-  event.waitUntil(
-    clients.openWindow(event.notification.data.url)
-  );
-});
