@@ -1,7 +1,6 @@
 name: Mess Notifications (Auto)
 
 on:
-  workflow_dispatch:
   schedule:
     # All times are UTC (IST = UTC + 5:30)
     - cron: "30 23 * * *"   # Breakfast – 5:00 AM IST
