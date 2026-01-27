@@ -3,10 +3,11 @@ name: Mess Notifications (Auto)
 on:
   schedule:
     # All times are UTC (IST = UTC + 5:30)
-    - cron: "30 23 * * *"   # Breakfast – 5:00 AM IST
-    - cron: "30 5 * * *"    # Lunch – 11:00 AM IST
-    - cron: "30 9 * * *"    # Snacks – 3:00 PM IST
-    - cron: "0 13 * * *"    # Dinner – 6:30 PM IST
+    # These are "anchor" times — logic below handles delays
+    - cron: "30 0 * * *"    # Breakfast → 6:00 AM IST
+    - cron: "30 6 * * *"    # Lunch → 12:00 PM IST
+    - cron: "30 9 * * *"    # Snacks → 3:00 PM IST
+    - cron: "30 12 * * *"   # Dinner → 6:00 PM IST
 
   workflow_dispatch:
 
@@ -24,28 +25,42 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm ci || npm install firebase-admin
+        run: npm install
 
-      - name: Decide meal automatically (UTC-based)
+      - name: Decide meal (delay-safe, UTC-based)
         id: meal
         run: |
           HOUR=$(date -u +"%H")
           MIN=$(date -u +"%M")
 
+          NOW=$((10#$HOUR * 60 + 10#$MIN))
           echo "UTC time now: $HOUR:$MIN"
+          echo "UTC minutes since midnight: $NOW"
 
-          if [ "$HOUR" = "23" ] && [ "$MIN" = "30" ]; then
-            echo "meal=breakfast" >> $GITHUB_OUTPUT
-          elif [ "$HOUR" = "05" ] && [ "$MIN" = "30" ]; then
-            echo "meal=lunch" >> $GITHUB_OUTPUT
-          elif [ "$HOUR" = "09" ] && [ "$MIN" = "30" ]; then
-            echo "meal=snacks" >> $GITHUB_OUTPUT
-          elif [ "$HOUR" = "13" ] && [ "$MIN" = "00" ]; then
-            echo "meal=dinner" >> $GITHUB_OUTPUT
+          # Windows are 20 minutes wide to tolerate GitHub delays
+
+          # Breakfast → 00:30 UTC (6:00 AM IST)
+          if [ $NOW -ge 30 ] && [ $NOW -le 50 ]; then
+            meal=breakfast
+
+          # Lunch → 06:30 UTC (12:00 PM IST)
+          elif [ $NOW -ge $((6*60+30)) ] && [ $NOW -le $((6*60+50)) ]; then
+            meal=lunch
+
+          # Snacks → 09:30 UTC (3:00 PM IST)
+          elif [ $NOW -ge $((9*60+30)) ] && [ $NOW -le $((9*60+50)) ]; then
+            meal=snacks
+
+          # Dinner → 12:30 UTC (6:00 PM IST)
+          elif [ $NOW -ge $((12*60+30)) ] && [ $NOW -le $((12*60+50)) ]; then
+            meal=dinner
+
           else
-            echo "Not a scheduled mess notification time. Exiting safely."
+            echo "Outside all meal windows. Exiting."
             exit 0
           fi
+
+          echo "meal=$meal" >> $GITHUB_OUTPUT
 
       - name: Send mess notification
         run: node sendMessNotification.js ${{ steps.meal.outputs.meal }}
