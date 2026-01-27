@@ -1,18 +1,15 @@
-name: Mess Notifications
+name: Mess Notifications (Auto)
 
 on:
+  # GitHub-safe schedule
   schedule:
-  - cron: "30 23 * * *"   # Breakfast – 5:00 AM IST
-  - cron: "30 5 * * *"    # Lunch – 11:00 AM IST
-  - cron: "30 9 * * *"    # Snacks – 3:00 PM IST
-  - cron: "0 13 * * *"    # Dinner – 6:30 PM IST
+    - cron: "*/15 * * * *"
 
-
+  # Manual trigger (for testing)
   workflow_dispatch:
     inputs:
       meal:
-        description: "Which meal notification to send?"
-        required: true
+        required: false
         type: choice
         options:
           - breakfast
@@ -34,25 +31,102 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm ci || npm install firebase-admin
+        run: npm install firebase-admin
 
-      # Decide which meal to send
-      - name: Resolve meal
+      - name: Resolve meal (IST windows, no DB, no repeats)
         id: meal
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          # Manual trigger always wins
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.meal }}" ]; then
             echo "meal=${{ github.event.inputs.meal }}" >> $GITHUB_OUTPUT
-          else
-            case "${{ github.event.schedule }}" in
-              "30 1 * * *")  echo "meal=breakfast" >> $GITHUB_OUTPUT ;;
-              "30 6 * * *")  echo "meal=lunch" >> $GITHUB_OUTPUT ;;
-              "30 10 * * *") echo "meal=snacks" >> $GITHUB_OUTPUT ;;
-              "30 13 * * *") echo "meal=dinner" >> $GITHUB_OUTPUT ;;
-              *) echo "Unknown schedule"; exit 1 ;;
-            esac
+            exit 0
           fi
 
-      - name: Send notification
-        run: node sendMessNotification.js ${{ steps.meal.outputs.meal }}
+          HOUR=$(TZ=Asia/Kolkata date +"%H")
+          MIN=$(TZ=Asia/Kolkata date +"%M")
+          NOW=$((10#$HOUR * 60 + 10#$MIN))
+
+          echo "IST time: $HOUR:$MIN"
+
+          # Breakfast → 05:00–05:15
+          if [ $NOW -ge $((5*60)) ] && [ $NOW -lt $((5*60+15)) ]; then
+            meal=breakfast
+
+          # Lunch → 10:00–10:15
+          elif [ $NOW -ge $((10*60)) ] && [ $NOW -lt $((10*60+15)) ]; then
+            meal=lunch
+
+          # Snacks → 14:15–14:30
+          elif [ $NOW -ge $((14*60+15)) ] && [ $NOW -lt $((14*60+30)) ]; then
+            meal=snacks
+
+          # Dinner → 18:00–18:15
+          elif [ $NOW -ge $((18*60)) ] && [ $NOW -lt $((18*60+15)) ]; then
+            meal=dinner
+
+          else
+            echo "Not a send window. Exiting."
+            exit 0
+          fi
+
+          echo "meal=$meal" >> $GITHUB_OUTPUT
+
+      - name: Send notification (inline Node script)
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          node <<'EOF'
+          import fs from "fs";
+          import path from "path";
+          import admin from "firebase-admin";
+
+          const meal = process.env.MEAL || "${{ steps.meal.outputs.meal }}";
+
+          if (!meal) {
+            console.log("❌ Meal not provided");
+            process.exit(0);
+          }
+
+          if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
+            throw new Error("FIREBASE_SERVICE_ACCOUNT missing");
+          }
+
+          if (!admin.apps.length) {
+            admin.initializeApp({
+              credential: admin.credential.cert(
+                JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
+              )
+            });
+          }
+
+          const filePath = path.resolve(
+            process.cwd(),
+            "public/data/mess_menue.json"
+          );
+
+          const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+          const istDate = new Date(
+            new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+          );
+
+          const today = istDate.getDate().toString().padStart(2, "0");
+          const items = data[today]?.[meal];
+
+          if (!items || items.length === 0) {
+            console.log("⏭ No menu today");
+            process.exit(0);
+          }
+
+          const body = "• " + items.join("\n• ");
+
+          await admin.messaging().send({
+            topic: "mess-alerts",
+            notification: {
+              title: `🍽 ${meal.toUpperCase()}`,
+              body
+            }
+          });
+
+          console.log(`✅ ${meal} notification sent`);
+          EOF
