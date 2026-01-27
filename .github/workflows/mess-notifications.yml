@@ -1,15 +1,24 @@
 name: Mess Notifications (Auto)
 
 on:
-  # GitHub-safe schedule
   schedule:
-    - cron: "*/15 * * * *"
+    # Breakfast at 5:00 AM IST (23:30 UTC previous day)
+    - cron: "30 23 * * *"
+    
+    # Lunch at 11:00 AM IST (5:30 UTC)
+    - cron: "30 5 * * *"
+    
+    # Snacks at 2:00 PM IST (8:30 UTC)
+    - cron: "30 8 * * *"
+    
+    # Dinner at 5:00 PM IST (11:30 UTC)
+    - cron: "30 11 * * *"
 
-  # Manual trigger (for testing)
   workflow_dispatch:
     inputs:
       meal:
-        required: false
+        description: 'Meal type (breakfast/lunch/snacks/dinner)'
+        required: true
         type: choice
         options:
           - breakfast
@@ -22,111 +31,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install firebase-admin
+        run: npm install
 
-      - name: Resolve meal (IST windows, no DB, no repeats)
+      - name: Determine meal type
         id: meal
         run: |
-          # Manual trigger always wins
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.meal }}" ]; then
-            echo "meal=${{ github.event.inputs.meal }}" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          HOUR=$(TZ=Asia/Kolkata date +"%H")
-          MIN=$(TZ=Asia/Kolkata date +"%M")
-          NOW=$((10#$HOUR * 60 + 10#$MIN))
-
-          echo "IST time: $HOUR:$MIN"
-
-          # Breakfast → 05:00–05:15
-          if [ $NOW -ge $((5*60)) ] && [ $NOW -lt $((5*60+15)) ]; then
-            meal=breakfast
-
-          # Lunch → 10:00–10:15
-          elif [ $NOW -ge $((10*60)) ] && [ $NOW -lt $((10*60+15)) ]; then
-            meal=lunch
-
-          # Snacks → 14:15–14:30
-          elif [ $NOW -ge $((14*60+15)) ] && [ $NOW -lt $((14*60+30)) ]; then
-            meal=snacks
-
-          # Dinner → 18:00–18:15
-          elif [ $NOW -ge $((18*60)) ] && [ $NOW -lt $((18*60+15)) ]; then
-            meal=dinner
-
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            # Manual trigger
+            MEAL="${{ github.event.inputs.meal }}"
+            echo "🔧 Manual trigger: $MEAL"
           else
-            echo "Not a send window. Exiting."
-            exit 0
+            # Scheduled trigger - determine by UTC time
+            UTC_HOUR=$(date -u +"%H")
+            
+            case $UTC_HOUR in
+              23) MEAL="breakfast" ;;  # 23:30 UTC = 5:00 AM IST next day
+              5)  MEAL="lunch" ;;      # 5:30 UTC = 11:00 AM IST
+              8)  MEAL="snacks" ;;     # 8:30 UTC = 2:00 PM IST
+              11) MEAL="dinner" ;;     # 11:30 UTC = 5:00 PM IST
+              *)
+                echo "⏰ Unexpected time: $UTC_HOUR UTC. Exiting."
+                exit 0
+                ;;
+            esac
+            
+            IST_TIME=$(TZ=Asia/Kolkata date +"%I:%M %p")
+            echo "⏰ Scheduled trigger at $IST_TIME IST → $MEAL"
           fi
+          
+          echo "meal=$MEAL" >> $GITHUB_OUTPUT
 
-          echo "meal=$meal" >> $GITHUB_OUTPUT
-
-      - name: Send notification (inline Node script)
+      - name: Send mess notification
+        run: node sendMessNotification.js ${{ steps.meal.outputs.meal }}
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: |
-          node <<'EOF'
-          import fs from "fs";
-          import path from "path";
-          import admin from "firebase-admin";
-
-          const meal = process.env.MEAL || "${{ steps.meal.outputs.meal }}";
-
-          if (!meal) {
-            console.log("❌ Meal not provided");
-            process.exit(0);
-          }
-
-          if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
-            throw new Error("FIREBASE_SERVICE_ACCOUNT missing");
-          }
-
-          if (!admin.apps.length) {
-            admin.initializeApp({
-              credential: admin.credential.cert(
-                JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
-              )
-            });
-          }
-
-          const filePath = path.resolve(
-            process.cwd(),
-            "public/data/mess_menue.json"
-          );
-
-          const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
-
-          const istDate = new Date(
-            new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
-          );
-
-          const today = istDate.getDate().toString().padStart(2, "0");
-          const items = data[today]?.[meal];
-
-          if (!items || items.length === 0) {
-            console.log("⏭ No menu today");
-            process.exit(0);
-          }
-
-          const body = "• " + items.join("\n• ");
-
-          await admin.messaging().send({
-            topic: "mess-alerts",
-            notification: {
-              title: `🍽 ${meal.toUpperCase()}`,
-              body
-            }
-          });
-
-          console.log(`✅ ${meal} notification sent`);
-          EOF

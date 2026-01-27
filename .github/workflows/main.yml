@@ -2,14 +2,29 @@ name: Mess Notifications (Auto)
 
 on:
   schedule:
-    # All times are UTC (IST = UTC + 5:30)
-    # These are "anchor" times — logic below handles delays
-    - cron: "30 0 * * *"    # Breakfast → 6:00 AM IST
-    - cron: "30 6 * * *"    # Lunch → 12:00 PM IST
-    - cron: "30 9 * * *"    # Snacks → 3:00 PM IST
-    - cron: "30 12 * * *"   # Dinner → 6:00 PM IST
+    # Breakfast at 5:00 AM IST (23:30 UTC previous day)
+    - cron: "30 23 * * *"
+    
+    # Lunch at 11:00 AM IST (5:30 UTC)
+    - cron: "30 5 * * *"
+    
+    # Snacks at 2:00 PM IST (8:30 UTC)
+    - cron: "30 8 * * *"
+    
+    # Dinner at 5:00 PM IST (11:30 UTC)
+    - cron: "30 11 * * *"
 
   workflow_dispatch:
+    inputs:
+      meal:
+        description: 'Meal type (breakfast/lunch/snacks/dinner)'
+        required: true
+        type: choice
+        options:
+          - breakfast
+          - lunch
+          - snacks
+          - dinner
 
 jobs:
   notify:
@@ -27,40 +42,33 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Decide meal (delay-safe, UTC-based)
+      - name: Determine meal type
         id: meal
         run: |
-          HOUR=$(date -u +"%H")
-          MIN=$(date -u +"%M")
-
-          NOW=$((10#$HOUR * 60 + 10#$MIN))
-          echo "UTC time now: $HOUR:$MIN"
-          echo "UTC minutes since midnight: $NOW"
-
-          # Windows are 20 minutes wide to tolerate GitHub delays
-
-          # Breakfast → 00:30 UTC (6:00 AM IST)
-          if [ $NOW -ge 30 ] && [ $NOW -le 50 ]; then
-            meal=breakfast
-
-          # Lunch → 06:30 UTC (12:00 PM IST)
-          elif [ $NOW -ge $((6*60+30)) ] && [ $NOW -le $((6*60+50)) ]; then
-            meal=lunch
-
-          # Snacks → 09:30 UTC (3:00 PM IST)
-          elif [ $NOW -ge $((9*60+30)) ] && [ $NOW -le $((9*60+50)) ]; then
-            meal=snacks
-
-          # Dinner → 12:30 UTC (6:00 PM IST)
-          elif [ $NOW -ge $((12*60+30)) ] && [ $NOW -le $((12*60+50)) ]; then
-            meal=dinner
-
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            # Manual trigger
+            MEAL="${{ github.event.inputs.meal }}"
+            echo "🔧 Manual trigger: $MEAL"
           else
-            echo "Outside all meal windows. Exiting."
-            exit 0
+            # Scheduled trigger - determine by UTC time
+            UTC_HOUR=$(date -u +"%H")
+            
+            case $UTC_HOUR in
+              23) MEAL="breakfast" ;;  # 23:30 UTC = 5:00 AM IST next day
+              5)  MEAL="lunch" ;;      # 5:30 UTC = 11:00 AM IST
+              8)  MEAL="snacks" ;;     # 8:30 UTC = 2:00 PM IST
+              11) MEAL="dinner" ;;     # 11:30 UTC = 5:00 PM IST
+              *)
+                echo "⏰ Unexpected time: $UTC_HOUR UTC. Exiting."
+                exit 0
+                ;;
+            esac
+            
+            IST_TIME=$(TZ=Asia/Kolkata date +"%I:%M %p")
+            echo "⏰ Scheduled trigger at $IST_TIME IST → $MEAL"
           fi
-
-          echo "meal=$meal" >> $GITHUB_OUTPUT
+          
+          echo "meal=$MEAL" >> $GITHUB_OUTPUT
 
       - name: Send mess notification
         run: node sendMessNotification.js ${{ steps.meal.outputs.meal }}
