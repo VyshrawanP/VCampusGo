@@ -12,6 +12,17 @@ if (!admin.apps.length) {
 
 
 export default async function handler(req, res) {
+    const authHeader = req.headers.authorization;
+  const expectedToken = `Bearer ${process.env.MESS_API_SECRET}`;
+  
+  if (!authHeader || authHeader !== expectedToken) {
+    console.log("❌ Unauthorized access attempt");
+    return res.status(401).json({ 
+      error: "Unauthorized",
+      message: "Invalid or missing API token" 
+    });
+  }
+  
   const { meal } = req.query; // breakfast | lunch | snacks | dinner
   const istDate = new Date(
   new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })

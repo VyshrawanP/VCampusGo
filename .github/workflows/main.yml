@@ -9,10 +9,10 @@ on:
     - cron: "30 5 * * *"
     
     # Snacks at 2:00 PM IST (8:30 UTC)
-    - cron: "30 8 * * *"
+    - cron: "30 9 * * *"
     
     # Dinner at 5:00 PM IST (11:30 UTC)
-    - cron: "30 11 * * *"
+    - cron: "30 12 * * *"
 
   workflow_dispatch:
     inputs:
@@ -31,17 +31,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
       - name: Determine meal type
         id: meal
         run: |
@@ -70,7 +59,26 @@ jobs:
           
           echo "meal=$MEAL" >> $GITHUB_OUTPUT
 
-      - name: Send mess notification
-        run: node sendMessNotification.js ${{ steps.meal.outputs.meal }}
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      - name: Call API to send notification
+        run: |
+          MEAL="${{ steps.meal.outputs.meal }}"
+          API_URL="https://vcampusgo.vercel.app/api/send-mess?meal=$MEAL"
+          
+          echo "📡 Calling API: $API_URL"
+          
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -H "Authorization: Bearer ${{ secrets.MESS_API_SECRET }}" \
+            "$API_URL")
+          
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          
+          echo "📥 Response Code: $HTTP_CODE"
+          echo "📥 Response Body: $BODY"
+          
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "✅ Notification sent successfully"
+          else
+            echo "❌ API call failed with status $HTTP_CODE"
+            exit 1
+          fi
