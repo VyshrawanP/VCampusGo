@@ -37,6 +37,11 @@ await admin.messaging().send({
   notification: {
     title: `🍽 ${meal.toUpperCase()} in 1 hour`,
     body
+  },
+  webpush: {
+    fcmOptions: {
+      link: "https://vcampusgo.vercel.app/"  // 👈 ADD YOUR WEBSITE URL HERE
+    }
   }
 });
 
