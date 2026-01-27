@@ -11,8 +11,8 @@
   --blue-primary: #3b82f6;
   --blue-secondary: #2563eb;
 
-  --border-primary: rgba(255, 255, 255, 0.3);
-  --border-secondary: rgba(255, 255, 255, 0.2);
+  --border-primary: rgba(59, 130, 246, 0.3);
+  --border-secondary: rgba(59, 130, 246, 0.15);
 
   --glow-blue: rgba(59, 130, 246, 0.3);
 }
@@ -25,8 +25,8 @@ body.dark {
   --bg-card: rgba(15, 23, 42, 0.6);
   --text-main: #e5e7eb;
   --text-muted: #94a3b8;
-  --border-primary: rgba(255, 255, 255, 0.1);
-  --border-secondary: rgba(255, 255, 255, 0.05);
+  --border-primary: rgba(148, 163, 184, 0.3);
+  --border-secondary: rgba(148, 163, 184, 0.15);
 }
 
 /* ======================
@@ -67,8 +67,8 @@ body.dark {
   background: var(--bg-card);
   backdrop-filter: blur(14px) saturate(180%);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border-primary);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid var(--border-primary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .header-content {
@@ -242,13 +242,14 @@ h4 {
   padding: 0.75rem 1rem;
   font-size: 0.95rem;
   border-radius: 999px;
-  border: 1px solid var(--border-primary);
+  border: 2px solid var(--border-primary);
   background: var(--bg-card);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px);
   color: var(--text-main);
   outline: none;
   transition: border 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .title-things {
@@ -307,10 +308,11 @@ h4 {
   background: var(--bg-card);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-primary);
+  border: 2px solid var(--border-primary);
   border-radius: 16px;
   padding: 1rem;
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .card:hover {
@@ -332,7 +334,8 @@ h4 {
   object-fit: cover;
   border-radius: 50%;
   margin-bottom: 0.75rem;
-  border: 2px solid var(--border-secondary);
+  border: 3px solid var(--border-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .faculty-card h3 {
@@ -353,10 +356,11 @@ h4 {
   background: var(--bg-card);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-primary);
+  border: 2px solid var(--border-primary);
   border-radius: 16px;
   padding: 1rem;
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .mess-card:hover {
@@ -452,7 +456,7 @@ h4 {
   background: var(--bg-card);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-primary);
+  border: 2px solid var(--border-primary);
   border-radius: 16px;
   padding: 1.25rem;
   text-align: center;
@@ -464,6 +468,7 @@ h4 {
   justify-content: center;
   align-items: center;
   min-height: 150px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .visual-card i {
@@ -496,7 +501,7 @@ h4 {
   margin-top: 3rem;
   text-align: center;
   padding: 2rem 1.5rem;
-  border-top: 1px solid var(--border-primary);
+  border-top: 2px solid var(--border-primary);
 }
 
 .footer-content {
