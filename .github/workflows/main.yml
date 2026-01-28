@@ -2,7 +2,7 @@ name: Mess Notifications (Auto)
 
 on:
   schedule:
-# Breakfast at 5:00 AM IST (23:30 UTC previous day)
+    # Breakfast at 5:00 AM IST (23:30 UTC previous day)
     - cron: "30 23 * * *"
     
     # Lunch at 11:00 AM IST (5:30 UTC)
@@ -39,22 +39,23 @@ jobs:
             MEAL="${{ github.event.inputs.meal }}"
             echo "🔧 Manual trigger: $MEAL"
           else
-            # Scheduled trigger - determine by UTC time
-            UTC_HOUR=$(date -u +"%H")
+            # Scheduled trigger - use the cron expression directly
+            CRON="${{ github.event.schedule }}"
+            echo "🕐 Triggered by cron: $CRON"
             
-            case $UTC_HOUR in
-              23) MEAL="breakfast" ;;  # 23:30 UTC = 5:00 AM IST next day
-              5)  MEAL="lunch" ;;      # 5:30 UTC = 11:00 AM IST
-              8)  MEAL="snacks" ;;     # 8:30 UTC = 2:00 PM IST
-              11) MEAL="dinner" ;;     # 11:30 UTC = 5:00 PM IST
+            case "$CRON" in
+              "30 23 * * *") MEAL="breakfast" ;;
+              "30 5 * * *")  MEAL="lunch" ;;
+              "45 9 * * *")  MEAL="snacks" ;;
+              "30 12 * * *") MEAL="dinner" ;;
               *)
-                echo "⏰ Unexpected time: $UTC_HOUR UTC. Exiting."
-                exit 0
+                echo "❌ Unknown cron trigger: $CRON"
+                exit 1
                 ;;
             esac
             
             IST_TIME=$(TZ=Asia/Kolkata date +"%I:%M %p")
-            echo "⏰ Scheduled trigger at $IST_TIME IST → $MEAL"
+            echo "⏰ Intended meal → $MEAL (now $IST_TIME IST)"
           fi
           
           echo "meal=$MEAL" >> $GITHUB_OUTPUT
