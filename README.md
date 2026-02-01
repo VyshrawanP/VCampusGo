@@ -1,4 +1,4 @@
-# FacultyFinder
+#VCampusGo
 # Campus Helper (Unofficial)
 
 A student-built web application to help VIT-AP students:
