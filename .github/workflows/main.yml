@@ -2,18 +2,18 @@ name: Mess Notifications (Auto)
 
 on:
   schedule:
-    # Breakfast at 5:00 AM IST (23:30 UTC previous day)
-    - cron: "00 1 * * *"
+    # Breakfast at 6:45 AM IST = 1:15 AM UTC
+    - cron: "15 1 * * *"
     
-    # Lunch at 11:00 AM IST (5:30 UTC)
-    - cron: "00 6 * * *"
+    # Lunch at 11:35 AM IST = 6:05 AM UTC
+    - cron: "05 6 * * *"
     
-    # Snacks at 3:15 PM IST (9:45 UTC)
-    - cron: "45 10 * * *"
+    # Snacks at 4:00 PM IST = 10:30 AM UTC
+    - cron: "30 10 * * *"
     
-    # Dinner at 6:00 PM IST (12:30 UTC)
-    - cron: "45 12 * * *"
-
+    # Dinner at 6:45 PM IST = 1:15 PM UTC
+    - cron: "15 13 * * *"
+    
   workflow_dispatch:
     inputs:
       meal:
@@ -29,7 +29,6 @@ on:
 jobs:
   notify:
     runs-on: ubuntu-latest
-
     steps:
       - name: Determine meal type
         id: meal
@@ -44,10 +43,10 @@ jobs:
             echo "🕐 Triggered by cron: $CRON"
             
             case "$CRON" in
-              "30 23 * * *") MEAL="breakfast" ;;
-              "30 5 * * *")  MEAL="lunch" ;;
-              "45 9 * * *")  MEAL="snacks" ;;
-              "30 12 * * *") MEAL="dinner" ;;
+              "15 1 * * *")  MEAL="breakfast" ;;
+              "05 6 * * *")  MEAL="lunch" ;;
+              "30 10 * * *") MEAL="snacks" ;;
+              "15 13 * * *") MEAL="dinner" ;;
               *)
                 echo "❌ Unknown cron trigger: $CRON"
                 exit 1
@@ -59,7 +58,7 @@ jobs:
           fi
           
           echo "meal=$MEAL" >> $GITHUB_OUTPUT
-
+          
       - name: Call API to send notification
         run: |
           MEAL="${{ steps.meal.outputs.meal }}"
@@ -78,7 +77,7 @@ jobs:
           echo "📥 Response Body: $BODY"
           
           if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
-            echo "✅ Notification sent successfully"
+            echo "✅ Notification sent successfully for $MEAL"
           else
             echo "❌ API call failed with status $HTTP_CODE"
             exit 1
