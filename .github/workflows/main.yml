@@ -3,16 +3,16 @@ name: Mess Notifications (Auto)
 on:
   schedule:
     # Breakfast at 6:45 AM IST = 1:15 AM UTC
-    - cron: "15 1 * * *"
+    - cron: "30 23 * * *"
     
     # Lunch at 11:35 AM IST = 6:05 AM UTC
-    - cron: "05 6 * * *"
+    - cron: "45 5 * * *"
     
     # Snacks at 4:00 PM IST = 10:30 AM UTC
     - cron: "30 10 * * *"
     
     # Dinner at 6:45 PM IST = 1:15 PM UTC
-    - cron: "15 13 * * *"
+    - cron: "00 13 * * *"
     
   workflow_dispatch:
     inputs:
