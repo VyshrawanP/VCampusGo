@@ -46,7 +46,7 @@ jobs:
             case "$CRON" in
               "30 23 * * *") MEAL="breakfast" ;;
               "30 5 * * *")  MEAL="lunch" ;;
-              "45 9 * * *")  MEAL="snacks" ;;
+              "15 10 * * *")  MEAL="snacks" ;;
               "30 12 * * *") MEAL="dinner" ;;
               *)
                 echo "❌ Unknown cron trigger: $CRON"
