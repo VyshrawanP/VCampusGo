@@ -1,0 +1,85 @@
+name: Mess Notifications (Auto)
+
+on:
+  schedule:
+    # Breakfast at 5:00 AM IST (23:30 UTC previous day)
+    - cron: "30 23 * * *"
+    
+    # Lunch at 11:00 AM IST (5:30 UTC)
+    - cron: "30 5 * * *"
+    
+    # Snacks at 3:15 PM IST (9:45 UTC)
+    - cron: "45 9 * * *"
+    
+    # Dinner at 6:00 PM IST (12:30 UTC)
+    - cron: "30 12 * * *"
+
+  workflow_dispatch:
+    inputs:
+      meal:
+        description: 'Meal type (breakfast/lunch/snacks/dinner)'
+        required: true
+        type: choice
+        options:
+          - breakfast
+          - lunch
+          - snacks
+          - dinner
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Determine meal type
+        id: meal
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            # Manual trigger
+            MEAL="${{ github.event.inputs.meal }}"
+            echo "🔧 Manual trigger: $MEAL"
+          else
+            # Scheduled trigger - use the cron expression directly
+            CRON="${{ github.event.schedule }}"
+            echo "🕐 Triggered by cron: $CRON"
+            
+            case "$CRON" in
+              "30 23 * * *") MEAL="breakfast" ;;
+              "30 5 * * *")  MEAL="lunch" ;;
+              "45 9 * * *")  MEAL="snacks" ;;
+              "30 12 * * *") MEAL="dinner" ;;
+              *)
+                echo "❌ Unknown cron trigger: $CRON"
+                exit 1
+                ;;
+            esac
+            
+            IST_TIME=$(TZ=Asia/Kolkata date +"%I:%M %p")
+            echo "⏰ Intended meal → $MEAL (now $IST_TIME IST)"
+          fi
+          
+          echo "meal=$MEAL" >> $GITHUB_OUTPUT
+
+      - name: Call API to send notification
+        run: |
+          MEAL="${{ steps.meal.outputs.meal }}"
+          API_URL="https://vcampusgo.vercel.app/api/send-mess?meal=$MEAL"
+          
+          echo "📡 Calling API: $API_URL"
+          
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -H "Authorization: Bearer ${{ secrets.MESS_API_SECRET }}" \
+            "$API_URL")
+          
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          
+          echo "📥 Response Code: $HTTP_CODE"
+          echo "📥 Response Body: $BODY"
+          
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "✅ Notification sent successfully"
+          else
+            echo "❌ API call failed with status $HTTP_CODE"
+            exit 1
+          fi

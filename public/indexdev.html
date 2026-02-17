@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Student Utility Portal</title>
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/styledev.css">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+
+  <!-- ================= STICKY HEADER WITH THEME TOGGLE ================= -->
+  <div class="sticky-header" id="stickyHeader">
+    <div class="header-content">
+      <div class="logo">VCampusGo</div>
+      
+      <nav class="desktop-nav">
+        <a href="#faculty"> Faculty</a>
+        <a href="#mess"> Mess Menu</a>
+        <a href="https://cgpacalculation-2.onrender.com/" target="_blank"> CGPA Calculator</a>
+        <a href="https://ripdspace.netlify.app/" target="_blank"> PYQs</a>
+      </nav>
+
+      <div class="header-controls">
+        <button class="theme-toggle" id="themeToggle">
+          <i class="fas fa-moon"></i>
+        </button>
+        
+        <button class="menu-btn" id="menuBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#faculty"> Faculty</a>
+      <a href="#mess">Mess Menu</a>
+      <a href="https://cgpacalculation-2.onrender.com/" target="_blank"> CGPA Calculator</a>
+      <a href="https://ripdspace.netlify.app/" target="_blank"> PYQs</a>
+    </div>
+  </div>
+
+  <!-- ================= HEADER / FACULTY FINDER ================= -->
+  <header class="header" id="faculty">
+    <div class="title-things">
+      <h1>VCampusGo</h1>
+    </div>
+
+    <p class="subtitle">
+      "An unofficial student-to-student helper — built only to make campus life easier."
+    </p>
+
+    <h4>Find Your Faculty</h4>
+
+    <div class="search-container">
+      <input
+        type="text"
+        id="facultySearch"
+        placeholder="Find faculty"
+        autocomplete="off"
+      />
+    </div>
+  </header>
+
+  <!-- ================= FACULTY RESULTS ================= -->
+  <main class="main-content">
+    <section class="faculty-section">
+      <div id="facultyResults" class="faculty-grid">
+        <!-- Faculty cards injected via JS -->
+      </div>
+    </section>
+
+    <h2>More Utilities</h2>
+
+    <!-- ================= MESS MENU ================= -->
+    <section class="mess-section" id="mess">
+      <h2>Today's Mess Menu</h2>
+      <p id="messMeta" class="mess-meta">
+        <!-- Hostel · Month Year -->
+      </p>
+
+      <div id="messCards" class="mess-grid">
+        <!-- Meal cards injected via JS -->
+      </div>
+
+      <button id="notifyBtn" class="notify-btn">Enable meal notifications</button>
+
+      <!-- 🔑 DEFINE VAPID KEY FIRST -->
+      <script>
+        window.VAPID_KEY = "BM5wUA5jgGX0uv8ZXqfA3P5V7GM_TiRJ-JxyOq0r5yEygpO8Rdr29vdZrwHelY1BYtzQZ_ix3SypJ30bbaT80Tg";
+      </script>
+
+      <!-- 🚀 THEN load Firebase code -->
+      <script type="module" src="/js/fcm.js"></script>
+    </section>
+
+    <!-- ================= UTILITY CARDS ================= -->
+    <div class="visual-grid">
+      <a href="https://ripdspace.netlify.app/" class="visual-card">
+        <i class="fas fa-book-open"></i>
+        <h3>Visit PYQs</h3>
+        <p>Previous year question papers</p>
+      </a>
+
+      <a href="https://cgpacalculation-2.onrender.com/" class="visual-card">
+        <i class="fas fa-calculator"></i>
+        <h3>CGPA Calculator</h3>
+        <p>Calculate your CGPA easily</p>
+      </a>
+    </div>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p class="footer-name">Developed by <strong>Vyshrawan P</strong></p>
+      <p class="footer-sub">Student project · Unofficial</p>
+
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/vyshrawan-p-795b5b256/" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-linkedin"></i> LinkedIn
+        </a>
+        <a href="https://github.com/VyshrawanP" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-github"></i> GitHub
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= JS ================= -->
+  <script src="js/faculty.js"></script>
+  <script src="js/mess.js"></script>
+  <script src="js/main.js"></script>
+  
+  <!-- Theme Toggle & Mobile Menu Script -->
+  <script>
+    // Theme Toggle Functionality
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = themeToggle.querySelector("i");
+
+    // Load saved theme
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark");
+      themeIcon.classList.replace("fa-moon", "fa-sun");
+    }
+
+    themeToggle.onclick = () => {
+      document.body.classList.toggle("dark");
+      themeToggle.classList.add("rotate");
+      
+      const isDark = document.body.classList.contains("dark");
+      themeIcon.classList.toggle("fa-moon", !isDark);
+      themeIcon.classList.toggle("fa-sun", isDark);
+      
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      
+      setTimeout(() => themeToggle.classList.remove("rotate"), 600);
+    };
+
+    // Mobile Menu Toggle
+    const menuBtn = document.getElementById("menuBtn");
+    const stickyHeader = document.getElementById("stickyHeader");
+    const mobileNav = document.getElementById("mobileNav");
+
+    menuBtn.onclick = () => {
+      stickyHeader.classList.toggle("open");
+      const isOpen = stickyHeader.classList.contains("open");
+      menuBtn.querySelector("i").classList.toggle("fa-bars", !isOpen);
+      menuBtn.querySelector("i").classList.toggle("fa-times", isOpen);
+    };
+
+    // Close mobile menu when clicking a link
+    mobileNav.querySelectorAll("a").forEach(link => {
+      link.onclick = () => {
+        stickyHeader.classList.remove("open");
+        menuBtn.querySelector("i").classList.replace("fa-times", "fa-bars");
+      };
+    });
+  </script>
+
+</body>
+</html>

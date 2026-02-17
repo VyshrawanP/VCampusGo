@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGPA Calculator - vCampusGo</title>
+    
+    <style>
+        /* ======================
+           LIGHT THEME - MILLENNIAL AESTHETIC
+        ====================== */
+        :root {
+          --bg-main: #fafbfc;
+          --bg-card: rgba(255, 255, 255, 0.85);
+
+          --text-main: #2d3748;
+          --text-muted: #718096;
+
+          --blue-primary: #4299e1;
+          --blue-secondary: #3182ce;
+          
+          --accent-teal: #38b2ac;
+          --accent-coral: #fc8181;
+          --accent-purple: #9f7aea;
+          --accent-green: #48bb78;
+
+          --border-primary: #e2e8f0;
+          --border-secondary: #edf2f7;
+
+          --glow-blue: rgba(66, 153, 225, 0.2);
+          --shadow-soft: rgba(0, 0, 0, 0.05);
+        }
+
+        /* ======================
+           DARK MODE - MILLENNIAL
+        ====================== */
+        body.dark {
+          --bg-main: #1a202c;
+          --bg-card: rgba(45, 55, 72, 0.85);
+          --text-main: #f7fafc;
+          --text-muted: #a0aec0;
+          --border-primary: #2d3748;
+          --border-secondary: #4a5568;
+          --glow-blue: rgba(66, 153, 225, 0.3);
+          --shadow-soft: rgba(0, 0, 0, 0.3);
+        }
+
+        /* ======================
+           GLOBAL
+        ====================== */
+        * {
+          box-sizing: border-box;
+        }
+
+        body {
+          margin: 0;
+          background:
+            linear-gradient(135deg, rgba(66, 153, 225, 0.03) 0%, transparent 50%),
+            linear-gradient(225deg, rgba(56, 178, 172, 0.03) 0%, transparent 50%),
+            var(--bg-main);
+          color: var(--text-main);
+          font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+          transition: background 0.3s ease, color 0.3s ease;
+          padding-top: 70px;
+        }
+
+        body.dark {
+          background:
+            linear-gradient(135deg, rgba(66, 153, 225, 0.05) 0%, transparent 50%),
+            linear-gradient(225deg, rgba(56, 178, 172, 0.05) 0%, transparent 50%),
+            var(--bg-main);
+        }
+
+        /* ======================
+           STICKY HEADER
+        ====================== */
+        .sticky-header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 1000;
+          background: var(--bg-card);
+          backdrop-filter: blur(12px) saturate(150%);
+          -webkit-backdrop-filter: blur(12px) saturate(150%);
+          border-bottom: 1px solid var(--border-primary);
+          box-shadow: 0 2px 8px var(--shadow-soft);
+          transition: all 0.3s ease;
+        }
+
+        .header-content {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 1rem 1.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .logo {
+          font-weight: 700;
+          font-size: 1.3rem;
+          color: var(--text-main);
+          text-decoration: none;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+          background: var(--bg-card);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid var(--border-primary);
+          border-radius: 10px;
+          padding: 10px;
+          width: 40px;
+          height: 40px;
+          font-size: 1rem;
+          color: var(--text-main);
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 6px var(--shadow-soft);
+        }
+
+        .theme-toggle:hover {
+          background: var(--blue-primary);
+          color: white;
+          border-color: var(--blue-primary);
+          box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+          transform: translateY(-2px);
+        }
+
+        /* ======================
+           LAYOUT
+        ====================== */
+        .main-content {
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 2rem 1.5rem;
+        }
+
+        .page-header {
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+          font-size: 2.25rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+          font-size: 0.95rem;
+          color: var(--text-muted);
+        }
+
+        /* ======================
+           CARD BASE
+        ====================== */
+        .card {
+          background: var(--bg-card);
+          backdrop-filter: blur(10px) saturate(150%);
+          -webkit-backdrop-filter: blur(10px) saturate(150%);
+          border: 1px solid var(--border-primary);
+          border-radius: 12px;
+          padding: 1.5rem;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 
+            0 1px 3px var(--shadow-soft),
+            0 1px 2px rgba(0, 0, 0, 0.03);
+          margin-bottom: 1.5rem;
+        }
+
+        /* ======================
+           SUBJECT ROWS
+        ====================== */
+        .subjects-container {
+          margin-bottom: 1.5rem;
+        }
+
+        .subject-row {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr auto;
+          gap: 12px;
+          align-items: center;
+          padding: 0.75rem;
+          background: var(--bg-card);
+          border: 1px solid var(--border-primary);
+          border-radius: 10px;
+          margin-bottom: 0.75rem;
+          transition: all 0.25s ease;
+        }
+
+        .subject-row:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px var(--shadow-soft);
+          border-color: var(--blue-primary);
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .form-group label {
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: var(--text-muted);
+          margin-bottom: 4px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        input, select {
+          padding: 0.625rem 0.75rem;
+          border: 1px solid var(--border-primary);
+          border-radius: 8px;
+          background: var(--bg-card);
+          color: var(--text-main);
+          font-size: 0.9rem;
+          transition: all 0.25s ease;
+          outline: none;
+        }
+
+        input:focus, select:focus {
+          border-color: var(--blue-primary);
+          box-shadow: 0 0 0 3px var(--glow-blue);
+        }
+
+        select {
+          cursor: pointer;
+          font-weight: 600;
+          color: var(--blue-primary);
+        }
+
+        /* ======================
+           BUTTONS
+        ====================== */
+        .btn {
+          padding: 0.75rem 1.25rem;
+          border: none;
+          border-radius: 8px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+        }
+
+        .btn-primary {
+          background: linear-gradient(135deg, var(--blue-primary), var(--accent-teal));
+          color: white;
+          box-shadow: 0 4px 12px rgba(66, 153, 225, 0.25);
+        }
+
+        .btn-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(66, 153, 225, 0.35);
+        }
+
+        .btn-danger {
+          background: var(--accent-coral);
+          color: white;
+          width: 36px;
+          height: 36px;
+          padding: 0;
+        }
+
+        .btn-danger:hover {
+          background: #f56565;
+          transform: translateY(-2px);
+        }
+
+        .add-subject-btn {
+          width: 100%;
+          background: transparent;
+          color: var(--blue-primary);
+          border: 2px dashed var(--border-primary);
+        }
+
+        .add-subject-btn:hover {
+          background: var(--blue-primary);
+          color: white;
+          border-style: solid;
+          border-color: var(--blue-primary);
+        }
+
+        /* ======================
+           RESULT CARD
+        ====================== */
+        .result-card {
+          background: linear-gradient(135deg, var(--blue-primary), var(--accent-teal));
+          color: white;
+          text-align: center;
+          padding: 2rem;
+          border-radius: 12px;
+          box-shadow: 0 10px 30px rgba(66, 153, 225, 0.3);
+          margin-bottom: 1.5rem;
+        }
+
+        .result-label {
+          font-size: 0.95rem;
+          opacity: 0.9;
+          margin-bottom: 0.5rem;
+        }
+
+        .result-value {
+          font-size: 3.5rem;
+          font-weight: 700;
+          margin: 0.75rem 0;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-subtitle {
+          font-size: 0.85rem;
+          opacity: 0.85;
+        }
+
+        /* ======================
+           GRADE INFO
+        ====================== */
+        .grade-info {
+          background: var(--bg-card);
+          backdrop-filter: blur(10px) saturate(150%);
+          -webkit-backdrop-filter: blur(10px) saturate(150%);
+          border: 1px solid var(--border-primary);
+          border-radius: 12px;
+          padding: 1.5rem;
+          margin-top: 1.5rem;
+        }
+
+        .grade-info h3 {
+          font-size: 1.1rem;
+          margin-bottom: 1rem;
+          color: var(--text-main);
+        }
+
+        .grade-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+          gap: 12px;
+        }
+
+        .grade-item {
+          text-align: center;
+          padding: 1rem;
+          background: var(--bg-card);
+          border: 1px solid var(--border-primary);
+          border-radius: 10px;
+          transition: all 0.25s ease;
+        }
+
+        .grade-item:hover {
+          transform: translateY(-3px);
+          border-color: var(--blue-primary);
+          box-shadow: 0 6px 16px var(--shadow-soft);
+        }
+
+        .grade-letter {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: var(--blue-primary);
+          margin-bottom: 4px;
+        }
+
+        .grade-points {
+          font-size: 0.85rem;
+          color: var(--text-muted);
+        }
+
+        /* ======================
+           ACTIONS
+        ====================== */
+        .actions {
+          display: flex;
+          gap: 12px;
+          margin-top: 1.5rem;
+        }
+
+        .actions button {
+          flex: 1;
+        }
+
+        /* ======================
+           FOOTER
+        ====================== */
+        .footer {
+          margin-top: 3rem;
+          text-align: center;
+          padding: 2rem 1.5rem;
+          border-top: 2px solid var(--border-primary);
+        }
+
+        .footer-links {
+          margin-top: 1rem;
+        }
+
+        .footer-links a {
+          color: var(--text-muted);
+          text-decoration: none;
+          font-size: 0.9rem;
+          transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+          color: var(--blue-primary);
+        }
+
+        /* ======================
+           MOBILE RESPONSIVE
+        ====================== */
+        @media (max-width: 768px) {
+          body {
+            padding-top: 65px;
+          }
+
+          .page-header h1 {
+            font-size: 1.9rem;
+          }
+
+          .subject-row {
+            grid-template-columns: 1fr;
+            gap: 10px;
+          }
+
+          .result-value {
+            font-size: 2.5rem;
+          }
+
+          .actions {
+            flex-direction: column;
+          }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- STICKY HEADER -->
+    <div class="sticky-header">
+        <div class="header-content">
+            <a href="https://vcampusgo.vercel.app" class="logo">🎓 VCampusGo</a>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1>CGPA Calculator</h1>
+            <p>Add subjects, select grades, and calculate your semester CGPA</p>
+        </div>
+
+        <!-- SUBJECTS CARD -->
+        <div class="card">
+            <div class="subjects-container" id="subjectsContainer">
+                <!-- Subjects will be added here dynamically -->
+            </div>
+
+            <button class="btn add-subject-btn" onclick="addSubject()">
+                ➕ Add Subject
+            </button>
+        </div>
+
+        <!-- RESULT CARD -->
+        <div class="result-card">
+            <div class="result-label">Your CGPA</div>
+            <div class="result-value" id="cgpaValue">0.00</div>
+            <div class="result-subtitle">
+                Based on <span id="totalCredits">0</span> credits
+            </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Save Progress</button>
+            <button class="btn btn-primary" onclick="resetAll()">🔄 Reset All</button>
+        </div>
+
+        <!-- GRADE INFO -->
+        <div class="grade-info">
+            <h3>📊 Grading System</h3>
+            <div class="grade-grid">
+                <div class="grade-item">
+                    <div class="grade-letter">S</div>
+                    <div class="grade-points">10 Points</div>
+                </div>
+                <div class="grade-item">
+                    <div class="grade-letter">A</div>
+                    <div class="grade-points">9 Points</div>
+                </div>
+                <div class="grade-item">
+                    <div class="grade-letter">B</div>
+                    <div class="grade-points">8 Points</div>
+                </div>
+                <div class="grade-item">
+                    <div class="grade-letter">C</div>
+                    <div class="grade-points">7 Points</div>
+                </div>
+                <div class="grade-item">
+                    <div class="grade-letter">D</div>
+                    <div class="grade-points">6 Points</div>
+                </div>
+                <div class="grade-item">
+                    <div class="grade-letter">E</div>
+                    <div class="grade-points">5 Points</div>
+                </div>
+                <div class="grade-item">
+                    <div class="grade-letter">F</div>
+                    <div class="grade-points">0 Points</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="footer-links">
+            <a href="https://vcampusgo.vercel.app">← Back to vCampusGo</a>
+        </div>
+    </div>
+
+    <script>
+        // Grade points mapping
+        const gradePoints = {
+            'S': 10,
+            'A': 9,
+            'B': 8,
+            'C': 7,
+            'D': 6,
+            'E': 5,
+            'F': 0
+        };
+
+        let subjects = [];
+        let subjectIdCounter = 0;
+
+        // Initialize
+        window.onload = function() {
+            loadData();
+            if (subjects.length === 0) {
+                addSubject();
+            }
+            applyTheme();
+        };
+
+        function addSubject() {
+            const subject = {
+                id: ++subjectIdCounter,
+                name: '',
+                credits: 3,
+                grade: 'S'
+            };
+            subjects.push(subject);
+            renderSubjects();
+            calculateCGPA();
+        }
+
+        function removeSubject(id) {
+            subjects = subjects.filter(s => s.id !== id);
+            renderSubjects();
+            calculateCGPA();
+        }
+
+        function updateSubject(id, field, value) {
+            const subject = subjects.find(s => s.id === id);
+            if (subject) {
+                subject[field] = value;
+                calculateCGPA();
+            }
+        }
+
+        function renderSubjects() {
+            const container = document.getElementById('subjectsContainer');
+            
+            if (subjects.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <p>No subjects added yet. Click "Add Subject" to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = subjects.map(subject => `
+                <div class="subject-row">
+                    <div class="form-group">
+                        <label>Subject Name</label>
+                        <input type="text" 
+                               placeholder="e.g., Data Structures"
+                               value="${subject.name}"
+                               oninput="updateSubject(${subject.id}, 'name', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Credits</label>
+                        <input type="number" 
+                               min="1" 
+                               max="10" 
+                               value="${subject.credits}"
+                               oninput="updateSubject(${subject.id}, 'credits', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Grade</label>
+                        <select onchange="updateSubject(${subject.id}, 'grade', this.value)">
+                            ${Object.keys(gradePoints).map(grade => `
+                                <option value="${grade}" ${subject.grade === grade ? 'selected' : ''}>
+                                    ${grade} (${gradePoints[grade]})
+                                </option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <button class="btn btn-danger" onclick="removeSubject(${subject.id})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function calculateCGPA() {
+            if (subjects.length === 0) {
+                document.getElementById('cgpaValue').textContent = '0.00';
+                document.getElementById('totalCredits').textContent = '0';
+                saveData();
+                return;
+            }
+
+            let totalPoints = 0;
+            let totalCredits = 0;
+
+            subjects.forEach(subject => {
+                const credits = parseFloat(subject.credits) || 0;
+                const points = gradePoints[subject.grade] || 0;
+                totalPoints += points * credits;
+                totalCredits += credits;
+            });
+
+            const cgpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : 0;
+            
+            document.getElementById('cgpaValue').textContent = cgpa;
+            document.getElementById('totalCredits').textContent = totalCredits;
+            
+            saveData();
+        }
+
+        function saveData() {
+            localStorage.setItem('cgpa-subjects', JSON.stringify({
+                subjects: subjects,
+                counter: subjectIdCounter
+            }));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('cgpa-subjects');
+            if (saved) {
+                const data = JSON.parse(saved);
+                subjects = data.subjects || [];
+                subjectIdCounter = data.counter || 0;
+                renderSubjects();
+                calculateCGPA();
+            }
+        }
+
+        function resetAll() {
+            if (confirm('⚠️ Are you sure you want to reset all subjects? This cannot be undone!')) {
+                subjects = [];
+                subjectIdCounter = 0;
+                localStorage.removeItem('cgpa-subjects');
+                addSubject();
+                renderSubjects();
+                calculateCGPA();
+            }
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        function applyTheme() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark') {
+                document.body.classList.add('dark');
+                document.getElementById('themeBtn').textContent = '☀️';
+            }
+        }
+    </script>
+
+</body>
+</html>

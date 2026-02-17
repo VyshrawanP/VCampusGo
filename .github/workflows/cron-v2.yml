@@ -1,0 +1,19 @@
+name: Mess Notifications V2 (LH/MH Split)
+on:
+  schedule:
+    - cron: '0 7 * * *'   # 7 AM - Breakfast
+    - cron: '0 11 * * *'  # 11 AM - Lunch
+    - cron: '0 15 * * *'  # 3 PM - Snacks
+    - cron: '0 18 * * *'  # 6 PM - Dinner
+
+jobs:
+  notify-split:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send separate notifications to LH and MH
+        run: |
+          curl -X GET "https://vcampusgo.vercel.app/api/notify-v2?meal=${{ matrix.meal }}" \
+            -H "Authorization: Bearer ${{ secrets.MESS_API_SECRET }}"
+    strategy:
+      matrix:
+        meal: [breakfast, lunch, snacks, dinner]
