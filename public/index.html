@@ -114,6 +114,13 @@
     <option value="mh">Mens Hostel </option>
     <option value="lh">Ladies Hostel </option>
   </select>
+  <script>
+  document.getElementById("hostelSelect").addEventListener("change", function() {
+    if (this.value === "lh") {
+      window.location.href = "https://vcampusgolh.vercel.app";
+    }
+  });
+</script>
 
 
 </div>
@@ -125,7 +132,7 @@
       </div>
 
       <button id="notifyBtnMH" class="notify-btn">🔔 Enable meal notifications For MH</button>
-<button onclick="subscribeLH()">🔔 Subscribe Ladies Hostel</button>
+
 
 
 <script type="module">
