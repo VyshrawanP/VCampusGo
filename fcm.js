@@ -14,7 +14,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-document.getElementById("notifyBtn").addEventListener("click", async () => {
+document.getElementById("notifyBtnMH").addEventListener("click", async () => {
   const permission = await Notification.requestPermission();
   if (permission !== "granted") return;
 
