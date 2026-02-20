@@ -5,33 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Student Utility Portal</title>
-  <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
-  <!-- Google Font -->
+  <!-- Google Fonts — Plus Jakarta Sans for the orange theme -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/styledev.css">
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZS6HZLVNJD"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-ZS6HZLVNJD');
-</script>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZS6HZLVNJD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZS6HZLVNJD');
+  </script>
 </head>
 
 <body>
@@ -39,20 +33,22 @@
   <!-- ================= STICKY HEADER WITH THEME TOGGLE ================= -->
   <div class="sticky-header" id="stickyHeader">
     <div class="header-content">
-      <div class="logo">VCampusGo</div>
-      
+      <div class="logo">
+        VCampusGo
+        <a href="https://vyshrawan-portfolio.vercel.app/" target="_blank" rel="noopener noreferrer" style="font-size:10px;font-weight:500;color:var(--text-muted);letter-spacing:0.02em;margin-left:6px;opacity:0.75;text-decoration:none;transition:opacity 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">by Vyshrawan P</a>
+      </div>
+
       <nav class="desktop-nav">
-        <a href="#faculty"> Faculty</a>
-        <a href="#mess"> Mess Menu</a>
-        <a href="/cgpa.html"> CGPA Calculator</a>
-        <a href="https://ripdspace.netlify.app/" target="_blank"> PYQs</a>
+        <a href="#faculty">Faculty</a>
+        <a href="#mess">Mess Menu</a>
+        <a href="/cgpa.html">CGPA Calculator</a>
+        <a href="https://ripdspace.netlify.app/" target="_blank">PYQs</a>
       </nav>
 
       <div class="header-controls">
         <button class="theme-toggle" id="themeToggle">
           <i class="fas fa-moon"></i>
         </button>
-        
         <button class="menu-btn" id="menuBtn">
           <i class="fas fa-bars"></i>
         </button>
@@ -61,12 +57,13 @@
 
     <!-- Mobile Navigation -->
     <div class="mobile-nav" id="mobileNav">
-      <a href="#faculty"> Faculty</a>
+      <a href="#faculty">Faculty</a>
       <a href="#mess">Mess Menu</a>
-      <a href="/cgpa.html"> CGPA Calculator</a>
-      <a href="https://ripdspace.netlify.app/" target="_blank"> PYQs</a>
+      <a href="/cgpa.html">CGPA Calculator</a>
+      <a href="https://ripdspace.netlify.app/" target="_blank">PYQs</a>
     </div>
   </div>
+
 
   <!-- ================= HEADER / FACULTY FINDER ================= -->
   <header class="header" id="faculty">
@@ -75,26 +72,28 @@
     </div>
 
     <p class="subtitle">
-      "An unofficial student-to-student helper — built only to make campus life easier."
+      An unofficial student-to-student helper — built only to make campus life easier.
     </p>
 
     <h4>Find Your Faculty</h4>
 
     <div class="search-container">
+      <i class="fas fa-magnifying-glass"></i>
       <input
         type="text"
         id="facultySearch"
-        placeholder="Find faculty"
+        placeholder="Search by name or department…"
         autocomplete="off"
       />
     </div>
   </header>
 
+
   <!-- ================= FACULTY RESULTS ================= -->
   <main class="main-content">
     <section class="faculty-section">
       <div id="facultyResults" class="faculty-grid">
-        <!-- Faculty cards injected via JS -->
+        <!-- Faculty cards injected via faculty.js -->
       </div>
     </section>
 
@@ -103,92 +102,76 @@
     <!-- ================= MESS MENU ================= -->
     <section class="mess-section" id="mess">
       <h2>Today's Mess Menu</h2>
-      <p id="messMeta" class="mess-meta">
-        <!-- Hostel · Month Year -->
-      </p>
+      <p id="messMeta" class="mess-meta"></p>
 
       <div class="hostel-control">
-  <span class="hostel-label">Hostel:</span>
-
-  <select id="hostelSelect" class="hostel-dropdown">
-    <option value="mh">Mens Hostel </option>
-    <option value="lh">Ladies Hostel </option>
-  </select>
-  <script>
-  document.getElementById("hostelSelect").addEventListener("change", function() {
-    if (this.value === "lh") {
-      window.location.href = "https://vcampusgolh.vercel.app";
-    }
-  });
-</script>
-
-
-</div>
-
-
-
-      <div id="messCards" class="mess-grid">
-        <!-- Meal cards injected via JS -->
+        <span class="hostel-label">Hostel</span>
+        <select id="hostelSelect" class="hostel-dropdown">
+          <option value="mh">Men's Hostel</option>
+          <option value="lh">Ladies Hostel</option>
+        </select>
+        <script>
+          document.getElementById("hostelSelect").addEventListener("change", function() {
+            if (this.value === "lh") {
+              window.location.href = "https://vcampusgolh.vercel.app";
+            }
+          });
+        </script>
       </div>
 
-      <button id="notifyBtnMH" class="notify-btn">🔔 Enable meal notifications For MH</button>
+      <div id="messCards" class="mess-grid">
+        <!-- Meal cards injected via mess.js -->
+      </div>
 
+      <button id="notifyBtnMH" class="notify-btn">
+        <i class="fas fa-bell"></i> Enable meal notifications for MH
+      </button>
 
+      <!-- LH FCM -->
+      <script type="module">
+        import { subscribeV2 } from './fcm-lh.js';
+        window.subscribeLH = () => subscribeV2('LH');
+      </script>
 
-<script type="module">
-  import { subscribeV2 } from './fcm-lh.js';  // This will work once file exists
-  window.subscribeLH = () => subscribeV2('LH');
-</script>
-
-<!-- MH VAPID Key (keep as is) -->
-<script>
-  window.VAPID_KEY = "BM5wUA5jgGX0uv8ZXqfA3P5V7GM_TiRJ-JxyOq0r5yEygpO8Rdr29vdZrwHelY1BYtzQZ_ix3SypJ30bbaT80Tg";
-</script>
-
-<!-- MH script (keep as is) -->
-<script type="module" src="/js/fcm-lh.js"></script>
-
-
-
-      <!-- 🔑 DEFINE VAPID KEY FIRST -->
+      <!-- MH VAPID Key -->
       <script>
         window.VAPID_KEY = "BM5wUA5jgGX0uv8ZXqfA3P5V7GM_TiRJ-JxyOq0r5yEygpO8Rdr29vdZrwHelY1BYtzQZ_ix3SypJ30bbaT80Tg";
       </script>
+      <script type="module" src="/js/fcm-lh.js"></script>
 
-
-
-
-      <!-- 🚀 THEN load Firebase code -->
+      <script>
+        window.VAPID_KEY = "BM5wUA5jgGX0uv8ZXqfA3P5V7GM_TiRJ-JxyOq0r5yEygpO8Rdr29vdZrwHelY1BYtzQZ_ix3SypJ30bbaT80Tg";
+      </script>
       <script type="module" src="/js/fcm.js"></script>
     </section>
 
 
-
-
-
-
     <!-- ================= UTILITY CARDS ================= -->
     <div class="visual-grid">
-      <a href="https://ripdspace.netlify.app/" class="visual-card">
+      <a href="https://ripdspace.netlify.app/" class="visual-card" target="_blank">
         <i class="fas fa-book-open"></i>
-        <h3>Visit PYQs</h3>
-        <p>Previous year question papers</p>
+        <h3>Previous Year Papers</h3>
+        <p>Question papers organised by subject and semester to help you prepare better.</p>
+        <span class="card-arrow">Browse PYQs <i class="fas fa-arrow-right" style="font-size:11px"></i></span>
       </a>
 
       <a href="/cgpa.html" class="visual-card">
         <i class="fas fa-calculator"></i>
         <h3>CGPA Calculator</h3>
-        <p>Calculate your CGPA easily</p>
+        <p>Calculate your cumulative GPA across semesters quickly and accurately.</p>
+        <span class="card-arrow">Open Calculator <i class="fas fa-arrow-right" style="font-size:11px"></i></span>
       </a>
     </div>
   </main>
 
+
   <!-- ================= FOOTER ================= -->
   <footer class="footer">
     <div class="footer-content">
-      <p class="footer-name">Developed by <strong>Vyshrawan P</strong></p>
-      <p class="footer-sub">Student project · Unofficial</p>
-
+      <div class="footer-left">
+        <p class="footer-name">Developed by <strong>Vyshrawan P</strong></p>
+        <p class="footer-sub">Student project · Unofficial · Not affiliated with the university</p>
+      </div>
       <div class="footer-links">
         <a href="https://www.linkedin.com/in/vyshrawan-p-795b5b256/" target="_blank" rel="noopener noreferrer">
           <i class="fab fa-linkedin"></i> LinkedIn
@@ -200,18 +183,17 @@
     </div>
   </footer>
 
+
   <!-- ================= JS ================= -->
   <script src="js/faculty.js"></script>
   <script src="js/mess.js"></script>
   <script src="js/main.js"></script>
-  
-  <!-- Theme Toggle & Mobile Menu Script -->
-  <script>
-    // Theme Toggle Functionality
-    const themeToggle = document.getElementById("themeToggle");
-    const themeIcon = themeToggle.querySelector("i");
 
-    // Load saved theme
+  <script>
+    // ── Theme Toggle ──────────────────────────────────────
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon   = themeToggle.querySelector("i");
+
     if (localStorage.getItem("theme") === "dark") {
       document.body.classList.add("dark");
       themeIcon.classList.replace("fa-moon", "fa-sun");
@@ -220,29 +202,25 @@
     themeToggle.onclick = () => {
       document.body.classList.toggle("dark");
       themeToggle.classList.add("rotate");
-      
       const isDark = document.body.classList.contains("dark");
       themeIcon.classList.toggle("fa-moon", !isDark);
-      themeIcon.classList.toggle("fa-sun", isDark);
-      
+      themeIcon.classList.toggle("fa-sun",   isDark);
       localStorage.setItem("theme", isDark ? "dark" : "light");
-      
       setTimeout(() => themeToggle.classList.remove("rotate"), 600);
     };
 
-    // Mobile Menu Toggle
-    const menuBtn = document.getElementById("menuBtn");
+    // ── Mobile Menu ───────────────────────────────────────
+    const menuBtn      = document.getElementById("menuBtn");
     const stickyHeader = document.getElementById("stickyHeader");
-    const mobileNav = document.getElementById("mobileNav");
+    const mobileNav    = document.getElementById("mobileNav");
 
     menuBtn.onclick = () => {
       stickyHeader.classList.toggle("open");
       const isOpen = stickyHeader.classList.contains("open");
-      menuBtn.querySelector("i").classList.toggle("fa-bars", !isOpen);
-      menuBtn.querySelector("i").classList.toggle("fa-times", isOpen);
+      menuBtn.querySelector("i").classList.toggle("fa-bars",  !isOpen);
+      menuBtn.querySelector("i").classList.toggle("fa-times",  isOpen);
     };
 
-    // Close mobile menu when clicking a link
     mobileNav.querySelectorAll("a").forEach(link => {
       link.onclick = () => {
         stickyHeader.classList.remove("open");
@@ -250,8 +228,7 @@
       };
     });
   </script>
+
   <script defer src="/_vercel/analytics/script.js"></script>
-
-
 </body>
 </html>
