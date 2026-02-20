@@ -63,7 +63,7 @@ jobs:
       - name: Call API to send notification
         run: |
           MEAL="${{ steps.meal.outputs.meal }}"
-          API_URL="https://vcampusgolh.vercel.app/api/send-mess?meal=$MEAL"
+          API_URL="https://vcampusgo.vercel.app/api/send-mess?meal=$MEAL"
           
           echo "📡 Calling API: $API_URL"
           
