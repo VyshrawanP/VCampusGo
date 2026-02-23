@@ -10,26 +10,21 @@ if (!admin.apps.length) {
   });
 }
 
-
 export default async function handler(req, res) {
-    const authHeader = req.headers.authorization;
+  const authHeader = req.headers.authorization;
   const expectedToken = `Bearer ${process.env.MESS_API_SECRET}`;
-  
+
   if (!authHeader || authHeader !== expectedToken) {
-    console.log("❌ Unauthorized access attempt");
-    return res.status(401).json({ 
-      error: "Unauthorized",
-      message: "Invalid or missing API token" 
-    });
+    return res.status(401).json({ error: "Unauthorized" });
   }
-  
+
   const { meal } = req.query; // breakfast | lunch | snacks | dinner
+
   const istDate = new Date(
-  new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
-);
-const today = istDate.getDate().toString();
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+  );
 
-
+  const today = istDate.getDate().toString();
 
   const menuPath = path.join(process.cwd(), "public/data/mess_menue.json");
   const menu = JSON.parse(fs.readFileSync(menuPath, "utf8"));
@@ -50,18 +45,15 @@ const today = istDate.getDate().toString();
 
   await admin.messaging().send({
     topic: "mess-alerts",
-    notification: {
+    data: {
       title: titles[meal],
-      body
-    },
-    webpush: {
-      fcmOptions: {
-        link: "https://vcampusgo.vercel.app"
-      }
+      body,
+      hostel: "mh",
+      meal
     }
   });
-  console.log("CRON HIT", new Date().toISOString(), meal);
 
+  console.log("✅ Push sent:", meal);
 
   res.json({ sent: meal });
 }
