@@ -24,8 +24,13 @@ messaging.onBackgroundMessage((payload) => {
   const title =
     payload.data?.title || `${hostelLabel} Mess Menu Update`;
 
-  const body =
-    payload.data?.body || "Check today's mess menu";
+const items = payload.data?.items
+  ? JSON.parse(payload.data.items)
+  : [];
+
+const body = items.length
+  ? "• " + items.join("\n• ")
+  : "Check today's mess menu";
 
   return self.registration.showNotification(title, {
     body,
