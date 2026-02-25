@@ -10,40 +10,14 @@ firebase.initializeApp({
   appId: "1:532012102516:web:75aa44bf4f31cd783c3221"
 });
 
-
 const messaging = firebase.messaging();
 
 console.log("✅ SW loaded");
 
+// FCM handles notification display automatically
+// onBackgroundMessage is only for data-only messages
 messaging.onBackgroundMessage((payload) => {
   console.log("📬 Background message:", payload);
-
-  const hostel = payload.data?.hostel || "mh";
-  const hostelLabel = hostel.toUpperCase();
-
-  const title =
-    payload.data?.title || `${hostelLabel} Mess Menu Update`;
-
-const items = payload.data?.items
-  ? JSON.parse(payload.data.items)
-  : [];
-
-const body = items.length
-  ? "• " + items.join("\n• ")
-  : "Check today's mess menu";
-
-  return self.registration.showNotification(title, {
-    body,
-    icon: "/icon-192x192.png",
-    badge: "/icon-192x192.png",
-    tag: `${hostel}-menu`,
-    vibrate: [200, 100, 200],
-    data: { hostel },
-    actions: [
-      { action: "view", title: "View Menu" },
-      { action: "close", title: "Close" }
-    ]
-  });
 });
 
 self.addEventListener("notificationclick", (event) => {
@@ -51,9 +25,7 @@ self.addEventListener("notificationclick", (event) => {
 
   if (event.action === "close") return;
 
-  const hostel = event.notification.data?.hostel || "mh";
-
-  const url = `https://vcampusgo.vercel.app/?hostel=${hostel}#mess`;
+  const url = "https://vcampusgo.vercel.app";
 
   event.waitUntil(
     clients.matchAll({ type: "window", includeUncontrolled: true })
